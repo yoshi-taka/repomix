@@ -1,13 +1,11 @@
 import path from 'node:path';
-import { loadFileConfig, mergeConfigs } from '../../../config/configLoad.js';
-import type { RepomixConfigCli, RepomixConfigFile, RepomixConfigMerged } from '../../../config/configSchema.js';
+import type { RepomixConfigMerged } from '../../../config/configSchema.js';
 import { readFilePathsFromStdin } from '../../../core/file/fileStdin.js';
 import { type PackResult, pack } from '../../../core/packager.js';
 import { RepomixError } from '../../../shared/errorHandle.js';
 import { logger, setLogLevelByWorkerData } from '../../../shared/logger.js';
 import { Spinner } from '../../cliSpinner.js';
 import type { CliOptions } from '../../types.js';
-import { buildCliConfig } from '../defaultAction.js';
 
 // Initialize logger configuration from workerData at module load time
 // This must be called before any logging operations in the worker
@@ -16,6 +14,7 @@ setLogLevelByWorkerData();
 export interface DefaultActionTask {
   directories: string[];
   cwd: string;
+  config: RepomixConfigMerged;
   cliOptions: CliOptions;
   isStdin: boolean;
 }
@@ -28,22 +27,11 @@ export interface DefaultActionWorkerResult {
 export default async ({
   directories,
   cwd,
+  config,
   cliOptions,
   isStdin,
 }: DefaultActionTask): Promise<DefaultActionWorkerResult> => {
-  logger.trace('Worker: Loaded CLI options:', cliOptions);
-
-  // Load the config file
-  const fileConfig: RepomixConfigFile = await loadFileConfig(cwd, cliOptions.config ?? null);
-  logger.trace('Worker: Loaded file config:', fileConfig);
-
-  // Parse the CLI options into a config
-  const cliConfig: RepomixConfigCli = buildCliConfig(cliOptions);
-  logger.trace('Worker: CLI config:', cliConfig);
-
-  // Merge default, file, and CLI configs
-  const config: RepomixConfigMerged = mergeConfigs(cwd, fileConfig, cliConfig);
-  logger.trace('Worker: Merged config:', config);
+  logger.trace('Worker: Using pre-loaded config:', config);
 
   // Initialize spinner in worker
   const spinner = new Spinner('Initializing...', cliOptions);

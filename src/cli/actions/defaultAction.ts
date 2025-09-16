@@ -1,5 +1,7 @@
+import { loadFileConfig, mergeConfigs } from '../../config/configLoad.js';
 import {
   type RepomixConfigCli,
+  type RepomixConfigFile,
   type RepomixConfigMerged,
   type RepomixOutputStyle,
   repomixConfigCliSchema,
@@ -29,6 +31,18 @@ export const runDefaultAction = async (
   // Run migration before loading config
   await runMigrationAction(cwd);
 
+  // Load the config file in main process
+  const fileConfig: RepomixConfigFile = await loadFileConfig(cwd, cliOptions.config ?? null);
+  logger.trace('Loaded file config:', fileConfig);
+
+  // Parse the CLI options into a config
+  const cliConfig: RepomixConfigCli = buildCliConfig(cliOptions);
+  logger.trace('CLI config:', cliConfig);
+
+  // Merge default, file, and CLI configs
+  const config: RepomixConfigMerged = mergeConfigs(cwd, fileConfig, cliConfig);
+  logger.trace('Merged config:', config);
+
   // Create worker task runner
   const taskRunner = initTaskRunner<DefaultActionTask, DefaultActionWorkerResult>({
     numOfTasks: 1,
@@ -37,10 +51,11 @@ export const runDefaultAction = async (
   });
 
   try {
-    // Create task for worker
+    // Create task for worker (now with pre-loaded config)
     const task: DefaultActionTask = {
       directories,
       cwd,
+      config,
       cliOptions,
       isStdin: !!cliOptions.stdin,
     };
