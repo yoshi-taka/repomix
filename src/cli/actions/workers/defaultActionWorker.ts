@@ -40,37 +40,36 @@ export default async ({
   let packResult: PackResult;
 
   try {
+    if (isStdin) {
+      // Handle stdin processing
+      // Validate directory arguments for stdin mode
+      const firstDir = directories[0] ?? '.';
+      if (directories.length > 1 || firstDir !== '.') {
+        throw new RepomixError(
+          'When using --stdin, do not specify directory arguments. File paths will be read from stdin.',
+        );
+      }
 
-  if (isStdin) {
-    // Handle stdin processing
-    // Validate directory arguments for stdin mode
-    const firstDir = directories[0] ?? '.';
-    if (directories.length > 1 || firstDir !== '.') {
-      throw new RepomixError(
-        'When using --stdin, do not specify directory arguments. File paths will be read from stdin.',
+      const stdinResult = await readFilePathsFromStdin(cwd);
+
+      // Use pack with predefined files from stdin
+      packResult = await pack(
+        [cwd],
+        config,
+        (message) => {
+          spinner.update(message);
+        },
+        {},
+        stdinResult.filePaths,
       );
-    }
+    } else {
+      // Handle directory processing
+      const targetPaths = directories.map((directory) => path.resolve(cwd, directory));
 
-    const stdinResult = await readFilePathsFromStdin(cwd);
-
-    // Use pack with predefined files from stdin
-    packResult = await pack(
-      [cwd],
-      config,
-      (message) => {
+      packResult = await pack(targetPaths, config, (message) => {
         spinner.update(message);
-      },
-      {},
-      stdinResult.filePaths,
-    );
-  } else {
-    // Handle directory processing
-    const targetPaths = directories.map((directory) => path.resolve(cwd, directory));
-
-    packResult = await pack(targetPaths, config, (message) => {
-      spinner.update(message);
-    });
-  }
+      });
+    }
 
     spinner.succeed('Packing completed successfully!');
 

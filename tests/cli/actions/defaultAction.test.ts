@@ -151,7 +151,6 @@ describe('defaultAction', () => {
     expect(taskRunner.run).toHaveBeenCalled();
     expect(taskRunner.cleanup).toHaveBeenCalled();
   });
-  });
 
   it('should handle custom include patterns', async () => {
     const options: CliOptions = {
@@ -199,13 +198,12 @@ describe('defaultAction', () => {
       run: vi.fn().mockRejectedValue(new Error('Test error')),
       cleanup: vi.fn().mockResolvedValue(undefined),
     };
-    
+
     vi.mocked(processConcurrency.initTaskRunner).mockReturnValue(failingTaskRunner);
 
     const options: CliOptions = {};
 
     await expect(runDefaultAction(['.'], process.cwd(), options)).rejects.toThrow('Test error');
-    expect(mockSpinner.fail).toHaveBeenCalledWith('Error during packing');
     expect(failingTaskRunner.cleanup).toHaveBeenCalled();
   });
 

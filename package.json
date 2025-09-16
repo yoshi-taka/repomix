@@ -28,7 +28,7 @@
     "lint-secretlint": "secretlint \"**/*\" --secretlintignore .gitignore",
     "test": "vitest",
     "test-coverage": "vitest run --coverage",
-    "repomix": "node --run build && node --trace-warnings bin/repomix.cjs",
+    "repomix": "node --run build && node --enable-source-maps --trace-warnings bin/repomix.cjs",
     "repomix-src": "node --run repomix -- --include 'src,tests'",
     "repomix-website": "node --run repomix -- --include 'website'",
     "memory-check": "node --run repomix -- --verbose | grep Memory",
