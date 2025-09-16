@@ -1,0 +1,103 @@
+import path from 'node:path';
+import { loadFileConfig, mergeConfigs } from '../../../config/configLoad.js';
+import type { RepomixConfigCli, RepomixConfigFile, RepomixConfigMerged } from '../../../config/configSchema.js';
+import { readFilePathsFromStdin } from '../../../core/file/fileStdin.js';
+import { type PackResult, pack } from '../../../core/packager.js';
+import { RepomixError } from '../../../shared/errorHandle.js';
+import { logger, setLogLevelByWorkerData } from '../../../shared/logger.js';
+import { Spinner } from '../../cliSpinner.js';
+import type { CliOptions } from '../../types.js';
+import { buildCliConfig } from '../defaultAction.js';
+
+// Initialize logger configuration from workerData at module load time
+// This must be called before any logging operations in the worker
+setLogLevelByWorkerData();
+
+export interface DefaultActionTask {
+  directories: string[];
+  cwd: string;
+  cliOptions: CliOptions;
+  isStdin: boolean;
+}
+
+export interface DefaultActionWorkerResult {
+  packResult: PackResult;
+  config: RepomixConfigMerged;
+}
+
+export default async ({
+  directories,
+  cwd,
+  cliOptions,
+  isStdin,
+}: DefaultActionTask): Promise<DefaultActionWorkerResult> => {
+  logger.trace('Worker: Loaded CLI options:', cliOptions);
+
+  // Load the config file
+  const fileConfig: RepomixConfigFile = await loadFileConfig(cwd, cliOptions.config ?? null);
+  logger.trace('Worker: Loaded file config:', fileConfig);
+
+  // Parse the CLI options into a config
+  const cliConfig: RepomixConfigCli = buildCliConfig(cliOptions);
+  logger.trace('Worker: CLI config:', cliConfig);
+
+  // Merge default, file, and CLI configs
+  const config: RepomixConfigMerged = mergeConfigs(cwd, fileConfig, cliConfig);
+  logger.trace('Worker: Merged config:', config);
+
+  // Initialize spinner in worker
+  const spinner = new Spinner('Initializing...', cliOptions);
+  spinner.start();
+
+  let packResult: PackResult;
+
+  try {
+
+  if (isStdin) {
+    // Handle stdin processing
+    // Validate directory arguments for stdin mode
+    const firstDir = directories[0] ?? '.';
+    if (directories.length > 1 || firstDir !== '.') {
+      throw new RepomixError(
+        'When using --stdin, do not specify directory arguments. File paths will be read from stdin.',
+      );
+    }
+
+    const stdinResult = await readFilePathsFromStdin(cwd);
+
+    // Use pack with predefined files from stdin
+    packResult = await pack(
+      [cwd],
+      config,
+      (message) => {
+        spinner.update(message);
+      },
+      {},
+      stdinResult.filePaths,
+    );
+  } else {
+    // Handle directory processing
+    const targetPaths = directories.map((directory) => path.resolve(cwd, directory));
+
+    packResult = await pack(targetPaths, config, (message) => {
+      spinner.update(message);
+    });
+  }
+
+    spinner.succeed('Packing completed successfully!');
+
+    return {
+      packResult,
+      config,
+    };
+  } catch (error) {
+    spinner.fail('Error during packing');
+    throw error;
+  }
+};
+
+// Export cleanup function for Tinypool teardown
+export const onWorkerTermination = async () => {
+  // Any cleanup needed when worker terminates
+  // Currently no specific cleanup required for defaultAction worker
+};
