@@ -1,8 +1,9 @@
 import type { RepomixConfigMerged } from '../../config/configSchema.js';
 import { logger } from '../../shared/logger.js';
-import { initTaskRunner } from '../../shared/processConcurrency.js';
+import type { TaskRunner } from '../../shared/processConcurrency.js';
 import type { GitDiffResult } from '../git/gitDiffHandle.js';
-import type { GitDiffMetricsTask } from './workers/gitDiffMetricsWorker.js';
+import type { FileMetrics } from './workers/types.js';
+import type { UnifiedMetricsTask } from './workers/unifiedMetricsWorker.js';
 
 /**
  * Calculate token count for git diffs if included
@@ -10,9 +11,7 @@ import type { GitDiffMetricsTask } from './workers/gitDiffMetricsWorker.js';
 export const calculateGitDiffMetrics = async (
   config: RepomixConfigMerged,
   gitDiffResult: GitDiffResult | undefined,
-  deps = {
-    initTaskRunner,
-  },
+  deps: { taskRunner: TaskRunner<UnifiedMetricsTask, number | FileMetrics> },
 ): Promise<number> => {
   if (!config.output.git?.includeDiffs || !gitDiffResult) {
     return 0;
@@ -23,21 +22,16 @@ export const calculateGitDiffMetrics = async (
     return 0;
   }
 
-  const taskRunner = deps.initTaskRunner<GitDiffMetricsTask, number>({
-    numOfTasks: 1, // Single task for git diff calculation
-    workerPath: new URL('./workers/gitDiffMetricsWorker.js', import.meta.url).href,
-    runtime: 'worker_threads',
-  });
-
   try {
     const startTime = process.hrtime.bigint();
     logger.trace('Starting git diff token calculation using worker');
 
-    const result = await taskRunner.run({
+    const result = (await deps.taskRunner.run({
+      type: 'gitDiff',
       workTreeDiffContent: gitDiffResult.workTreeDiffContent,
       stagedDiffContent: gitDiffResult.stagedDiffContent,
       encoding: config.tokenCount.encoding,
-    });
+    })) as number;
 
     const endTime = process.hrtime.bigint();
     const duration = Number(endTime - startTime) / 1e6;
@@ -47,8 +41,5 @@ export const calculateGitDiffMetrics = async (
   } catch (error) {
     logger.error('Error during git diff token calculation:', error);
     throw error;
-  } finally {
-    // Always cleanup worker pool
-    await taskRunner.cleanup();
   }
 };
