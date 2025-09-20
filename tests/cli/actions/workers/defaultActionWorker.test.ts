@@ -228,7 +228,7 @@ describe('defaultActionWorker', () => {
 
       expect(mockReadFilePathsFromStdin).toHaveBeenCalledWith('/test/project');
       expect(mockPack).toHaveBeenCalledWith(
-        [path.resolve('/test/project', '.')],
+        ['/test/project'],
         mockConfig,
         expect.any(Function),
         {},
@@ -260,7 +260,7 @@ describe('defaultActionWorker', () => {
 
       expect(mockReadFilePathsFromStdin).toHaveBeenCalledWith('/test/project');
       expect(mockPack).toHaveBeenCalledWith(
-        [path.resolve('/test/project', '.')],
+        ['/test/project'],
         mockConfig,
         expect.any(Function),
         {},
