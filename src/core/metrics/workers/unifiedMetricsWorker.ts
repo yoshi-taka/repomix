@@ -40,7 +40,7 @@ export interface GitLogMetricsTask {
 
 export type UnifiedMetricsTask = OutputMetricsTask | FileMetricsTask | GitDiffMetricsTask | GitLogMetricsTask;
 
-export default async (task: UnifiedMetricsTask): Promise<number | FileMetrics> => {
+export const calculateUnifiedMetrics = async (task: UnifiedMetricsTask): Promise<number | FileMetrics> => {
   const processStartAt = process.hrtime.bigint();
 
   try {
@@ -108,6 +108,10 @@ export default async (task: UnifiedMetricsTask): Promise<number | FileMetrics> =
 const getProcessDuration = (startTime: bigint): string => {
   const endTime = process.hrtime.bigint();
   return (Number(endTime - startTime) / 1e6).toFixed(2);
+};
+
+export default async (task: UnifiedMetricsTask): Promise<number | FileMetrics> => {
+  return calculateUnifiedMetrics(task);
 };
 
 // Export cleanup function for Tinypool teardown

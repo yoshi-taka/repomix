@@ -1,5 +1,5 @@
 import type { RepomixConfigMerged } from '../../config/configSchema.js';
-import { initTaskRunner } from '../../shared/processConcurrency.js';
+import { type TaskRunner, initTaskRunner } from '../../shared/processConcurrency.js';
 import type { RepomixProgressCallback } from '../../shared/types.js';
 import type { ProcessedFile } from '../file/fileTypes.js';
 import type { GitDiffResult } from '../git/gitDiffHandle.js';
@@ -33,16 +33,19 @@ export const calculateMetrics = async (
     calculateOutputMetrics,
     calculateGitDiffMetrics,
     calculateGitLogMetrics,
+    taskRunner: undefined as TaskRunner<UnifiedMetricsTask, number | FileMetrics> | undefined,
   },
 ): Promise<CalculateMetricsResult> => {
   progressCallback('Calculating metrics...');
 
   // Initialize a single task runner for all metrics calculations
-  const taskRunner = initTaskRunner<UnifiedMetricsTask, number | FileMetrics>({
-    numOfTasks: processedFiles.length,
-    workerPath: new URL('../../../lib/core/metrics/workers/unifiedMetricsWorker.js', import.meta.url).href,
-    runtime: 'worker_threads',
-  });
+  const taskRunner =
+    deps.taskRunner ??
+    initTaskRunner<UnifiedMetricsTask, number | FileMetrics>({
+      numOfTasks: processedFiles.length,
+      workerPath: new URL('../../../lib/core/metrics/workers/unifiedMetricsWorker.js', import.meta.url).href,
+      runtime: 'worker_threads',
+    });
 
   try {
     // For top files display optimization: calculate token counts only for top files by character count
@@ -98,7 +101,9 @@ export const calculateMetrics = async (
       gitLogTokenCount: gitLogTokenCount.gitLogTokenCount,
     };
   } finally {
-    // Cleanup the task runner after all calculations are complete
-    await taskRunner.cleanup();
+    // Cleanup the task runner after all calculations are complete (only if we created it)
+    if (!deps.taskRunner) {
+      await taskRunner.cleanup();
+    }
   }
 };
