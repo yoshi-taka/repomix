@@ -200,9 +200,10 @@ export const searchFiles = async (
       absolute: false,
       dot: true,
       followSymbolicLinks: false,
-    }).catch((error) => {
+    }).catch((error: unknown) => {
       // Handle EPERM errors specifically
-      if (error.code === 'EPERM' || error.code === 'EACCES') {
+      const code = (error as NodeJS.ErrnoException | { code?: string })?.code;
+      if (code === 'EPERM' || code === 'EACCES') {
         throw new PermissionError(
           `Permission denied while scanning directory. Please check folder access permissions for your terminal app. path: ${rootDir}`,
           rootDir,

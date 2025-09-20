@@ -42,7 +42,7 @@ export const calculateMetrics = async (
     deps.taskRunner ??
     initTaskRunner<TokenCountTask, number>({
       numOfTasks: processedFiles.length,
-      workerPath: new URL('../../../lib/core/metrics/workers/calculateMetricsWorker.js', import.meta.url).href,
+      workerPath: new URL('./workers/calculateMetricsWorker.js', import.meta.url).href,
       runtime: 'worker_threads',
     });
 

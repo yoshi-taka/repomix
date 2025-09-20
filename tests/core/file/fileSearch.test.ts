@@ -91,8 +91,8 @@ describe('fileSearch', () => {
       const mockFilePaths = ['src/file1.js', 'src/file2.js'];
       const mockEmptyDirs = ['src/empty', 'empty-root'];
 
-      vi.mocked(globby).mockImplementation(async (_, options) => {
-        if (options?.onlyDirectories) {
+      vi.mocked(globby).mockImplementation(async (_: unknown, options: unknown) => {
+        if ((options as Record<string, unknown>)?.onlyDirectories) {
           return mockEmptyDirs;
         }
         return mockFilePaths;
@@ -115,8 +115,8 @@ describe('fileSearch', () => {
 
       const mockFilePaths = ['src/file1.js', 'src/file2.js'];
 
-      vi.mocked(globby).mockImplementation(async (_, options) => {
-        if (options?.onlyDirectories) {
+      vi.mocked(globby).mockImplementation(async (_: unknown, options: unknown) => {
+        if ((options as Record<string, unknown>)?.onlyDirectories) {
           throw new Error('Should not search for directories when disabled');
         }
         return mockFilePaths;

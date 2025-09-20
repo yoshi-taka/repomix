@@ -70,8 +70,9 @@ const isError = (error: unknown): error is Error => {
   const obj = error as Record<string, unknown>;
   return (
     typeof obj.message === 'string' &&
-    typeof obj.stack === 'string' &&
-    ('name' in obj ? typeof obj.name === 'string' : true)
+    // stack is optional across boundaries
+    (!('stack' in obj) || typeof obj.stack === 'string') &&
+    (!('name' in obj) || typeof obj.name === 'string')
   );
 };
 

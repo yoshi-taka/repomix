@@ -36,6 +36,8 @@ export interface PingResult {
 }
 
 // Function overloads for better type inference
+function defaultActionWorker(task: DefaultActionTask): Promise<DefaultActionWorkerResult>;
+function defaultActionWorker(task: PingTask): Promise<PingResult>;
 async function defaultActionWorker(
   task: DefaultActionTask | PingTask,
 ): Promise<DefaultActionWorkerResult | PingResult> {
@@ -48,7 +50,7 @@ async function defaultActionWorker(
   }
 
   // At this point, task is guaranteed to be DefaultActionTask
-  const { directories, cwd, config, cliOptions, isStdin } = task as DefaultActionTask;
+  const { directories, cwd, config, cliOptions, isStdin } = task;
 
   logger.trace('Worker: Using pre-loaded config:', config);
 
