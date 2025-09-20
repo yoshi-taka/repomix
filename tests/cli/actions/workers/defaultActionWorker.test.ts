@@ -132,15 +132,12 @@ describe('defaultActionWorker', () => {
     it('should handle ping requests correctly', async () => {
       const pingTask: PingTask = {
         ping: true,
-        cwd: '/test/dir',
-        config: mockConfig,
       };
 
       const result = (await defaultActionWorker(pingTask)) as PingResult;
 
       expect(result).toEqual({
         ping: true,
-        config: mockConfig,
       });
     });
   });

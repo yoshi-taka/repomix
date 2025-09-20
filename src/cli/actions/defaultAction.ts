@@ -57,7 +57,7 @@ export const runDefaultAction = async (
 
   try {
     // Wait for worker to be ready (Bun compatibility)
-    await waitForWorkerReady(taskRunner, { cwd, config });
+    await waitForWorkerReady(taskRunner);
 
     // Create task for worker (now with pre-loaded config)
     const task: DefaultActionTask = {
@@ -270,10 +270,9 @@ export const buildCliConfig = (options: CliOptions): RepomixConfigCli => {
  * Wait for worker to be ready by sending a ping request.
  * This is specifically needed for Bun compatibility due to ES module initialization timing issues.
  */
-const waitForWorkerReady = async (
-  taskRunner: { run: (task: DefaultActionTask | PingTask) => Promise<DefaultActionWorkerResult | PingResult> },
-  context: { cwd: string; config: RepomixConfigMerged },
-): Promise<void> => {
+const waitForWorkerReady = async (taskRunner: {
+  run: (task: DefaultActionTask | PingTask) => Promise<DefaultActionWorkerResult | PingResult>;
+}): Promise<void> => {
   const isBun = process.versions?.bun;
   if (!isBun) {
     // No need to wait for Node.js
@@ -288,8 +287,6 @@ const waitForWorkerReady = async (
     try {
       await taskRunner.run({
         ping: true,
-        cwd: context.cwd,
-        config: context.config,
       });
       logger.debug(`Worker initialization ping successful on attempt ${attempt}`);
       pingSuccessful = true;

@@ -21,8 +21,6 @@ export interface DefaultActionTask {
 
 export interface PingTask {
   ping: true;
-  cwd: string;
-  config: RepomixConfigMerged;
 }
 
 export interface DefaultActionWorkerResult {
@@ -32,7 +30,6 @@ export interface DefaultActionWorkerResult {
 
 export interface PingResult {
   ping: true;
-  config: RepomixConfigMerged;
 }
 
 // Function overloads for better type inference
@@ -45,7 +42,6 @@ async function defaultActionWorker(
   if ('ping' in task) {
     return {
       ping: true,
-      config: task.config,
     };
   }
 

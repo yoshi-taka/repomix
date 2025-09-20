@@ -1,3 +1,4 @@
+import { inspect } from 'node:util';
 import { z } from 'zod';
 import { REPOMIX_DISCORD_URL, REPOMIX_ISSUES_URL } from './constants.js';
 import { logger, repomixLogLevels } from './logger.js';
@@ -43,7 +44,21 @@ export const handleError = (error: unknown): void => {
   } else {
     // Unknown errors
     logger.error('✖ An unknown error occurred');
-    logger.note('Stack trace:', error);
+    // Safely serialize unknown error objects
+    try {
+      logger.note(
+        'Error details:',
+        inspect(error, {
+          depth: 3,
+          colors: false,
+          maxArrayLength: 10,
+          maxStringLength: 200,
+          breakLength: Number.POSITIVE_INFINITY,
+        }),
+      );
+    } catch {
+      logger.note('Error details: [Error object could not be serialized]');
+    }
 
     if (logger.getLogLevel() < repomixLogLevels.DEBUG) {
       logger.log('');

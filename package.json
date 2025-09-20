@@ -31,6 +31,8 @@
     "repomix": "node --run build && node --enable-source-maps --trace-warnings bin/repomix.cjs",
     "repomix-src": "node --run repomix -- --include 'src,tests'",
     "repomix-website": "node --run repomix -- --include 'website'",
+    "time-node": "node --run build && time node bin/repomix.cjs",
+    "time-bun": "bun run build && time bun bin/repomix.cjs",
     "memory-check": "node --run repomix -- --verbose | grep Memory",
     "memory-check-one-file": "node --run repomix -- --verbose --include 'package.json' | grep Memory",
     "website": "docker compose -f website/compose.yml up --build",
