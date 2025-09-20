@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import defaultActionWorker, {
   type DefaultActionTask,
@@ -159,7 +160,7 @@ describe('defaultActionWorker', () => {
       const result = (await defaultActionWorker(task)) as DefaultActionWorkerResult;
 
       expect(mockPack).toHaveBeenCalledWith(
-        ['/test/project/src', '/test/project/tests'],
+        [path.resolve('/test/project', 'src'), path.resolve('/test/project', 'tests')],
         mockConfig,
         expect.any(Function),
       );
@@ -182,7 +183,7 @@ describe('defaultActionWorker', () => {
 
       const result = (await defaultActionWorker(task)) as DefaultActionWorkerResult;
 
-      expect(mockPack).toHaveBeenCalledWith(['/test/project'], mockConfig, expect.any(Function));
+      expect(mockPack).toHaveBeenCalledWith([path.resolve('/test/project', '.')], mockConfig, expect.any(Function));
       expect(result).toEqual({
         packResult: mockPackResult,
         config: mockConfig,
@@ -226,10 +227,13 @@ describe('defaultActionWorker', () => {
       const result = (await defaultActionWorker(task)) as DefaultActionWorkerResult;
 
       expect(mockReadFilePathsFromStdin).toHaveBeenCalledWith('/test/project');
-      expect(mockPack).toHaveBeenCalledWith(['/test/project'], mockConfig, expect.any(Function), {}, [
-        'file1.txt',
-        'file2.txt',
-      ]);
+      expect(mockPack).toHaveBeenCalledWith(
+        [path.resolve('/test/project', '.')],
+        mockConfig,
+        expect.any(Function),
+        {},
+        ['file1.txt', 'file2.txt'],
+      );
       expect(result).toEqual({
         packResult: mockPackResult,
         config: mockConfig,
@@ -255,7 +259,13 @@ describe('defaultActionWorker', () => {
       await defaultActionWorker(task);
 
       expect(mockReadFilePathsFromStdin).toHaveBeenCalledWith('/test/project');
-      expect(mockPack).toHaveBeenCalledWith(['/test/project'], mockConfig, expect.any(Function), {}, ['file1.txt']);
+      expect(mockPack).toHaveBeenCalledWith(
+        [path.resolve('/test/project', '.')],
+        mockConfig,
+        expect.any(Function),
+        {},
+        ['file1.txt'],
+      );
     });
 
     it('should throw error when multiple directories are specified with stdin', async () => {
@@ -407,7 +417,11 @@ describe('defaultActionWorker', () => {
       await defaultActionWorker(task);
 
       expect(mockPack).toHaveBeenCalledWith(
-        ['/test/parent', '/test/project/current', '/test/project/child'],
+        [
+          path.resolve('/test/project', '../parent'),
+          path.resolve('/test/project', './current'),
+          path.resolve('/test/project', 'child'),
+        ],
         mockConfig,
         expect.any(Function),
       );
@@ -426,7 +440,11 @@ describe('defaultActionWorker', () => {
 
       await defaultActionWorker(task);
 
-      expect(mockPack).toHaveBeenCalledWith(['/absolute/path1', '/absolute/path2'], mockConfig, expect.any(Function));
+      expect(mockPack).toHaveBeenCalledWith(
+        [path.resolve('/test/project', '/absolute/path1'), path.resolve('/test/project', '/absolute/path2')],
+        mockConfig,
+        expect.any(Function),
+      );
     });
   });
 });
