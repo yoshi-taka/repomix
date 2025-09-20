@@ -227,13 +227,10 @@ describe('defaultActionWorker', () => {
       const result = (await defaultActionWorker(task)) as DefaultActionWorkerResult;
 
       expect(mockReadFilePathsFromStdin).toHaveBeenCalledWith('/test/project');
-      expect(mockPack).toHaveBeenCalledWith(
-        ['/test/project'],
-        mockConfig,
-        expect.any(Function),
-        {},
-        ['file1.txt', 'file2.txt'],
-      );
+      expect(mockPack).toHaveBeenCalledWith(['/test/project'], mockConfig, expect.any(Function), {}, [
+        'file1.txt',
+        'file2.txt',
+      ]);
       expect(result).toEqual({
         packResult: mockPackResult,
         config: mockConfig,
@@ -259,13 +256,7 @@ describe('defaultActionWorker', () => {
       await defaultActionWorker(task);
 
       expect(mockReadFilePathsFromStdin).toHaveBeenCalledWith('/test/project');
-      expect(mockPack).toHaveBeenCalledWith(
-        ['/test/project'],
-        mockConfig,
-        expect.any(Function),
-        {},
-        ['file1.txt'],
-      );
+      expect(mockPack).toHaveBeenCalledWith(['/test/project'], mockConfig, expect.any(Function), {}, ['file1.txt']);
     });
 
     it('should throw error when multiple directories are specified with stdin', async () => {
