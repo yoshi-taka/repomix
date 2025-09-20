@@ -14,7 +14,12 @@ import { initTaskRunner } from '../../shared/processConcurrency.js';
 import { reportResults } from '../cliReport.js';
 import type { CliOptions } from '../types.js';
 import { runMigrationAction } from './migrationAction.js';
-import type { DefaultActionTask, DefaultActionWorkerResult } from './workers/defaultActionWorker.js';
+import type {
+  DefaultActionTask,
+  DefaultActionWorkerResult,
+  PingResult,
+  PingTask,
+} from './workers/defaultActionWorker.js';
 
 export interface DefaultActionRunnerResult {
   packResult: PackResult;
@@ -44,13 +49,16 @@ export const runDefaultAction = async (
   logger.trace('Merged config:', config);
 
   // Create worker task runner
-  const taskRunner = initTaskRunner<DefaultActionTask, DefaultActionWorkerResult>({
+  const taskRunner = initTaskRunner<DefaultActionTask | PingTask, DefaultActionWorkerResult | PingResult>({
     numOfTasks: 1,
     workerPath: new URL('./workers/defaultActionWorker.js', import.meta.url).href,
     runtime: 'child_process',
   });
 
   try {
+    // Wait for worker to be ready (Bun compatibility)
+    await waitForWorkerReady(taskRunner, { cwd, config });
+
     // Create task for worker (now with pre-loaded config)
     const task: DefaultActionTask = {
       directories,
@@ -61,7 +69,7 @@ export const runDefaultAction = async (
     };
 
     // Run the task in worker (spinner is handled inside worker)
-    const result = await taskRunner.run(task);
+    const result = (await taskRunner.run(task)) as DefaultActionWorkerResult;
 
     // Report results in main process
     reportResults(cwd, result.packResult, result.config);
@@ -255,5 +263,47 @@ export const buildCliConfig = (options: CliOptions): RepomixConfigCli => {
   } catch (error) {
     rethrowValidationErrorIfZodError(error, 'Invalid cli arguments');
     throw error;
+  }
+};
+
+/**
+ * Wait for worker to be ready by sending a ping request.
+ * This is specifically needed for Bun compatibility due to ES module initialization timing issues.
+ */
+const waitForWorkerReady = async (
+  taskRunner: { run: (task: DefaultActionTask | PingTask) => Promise<DefaultActionWorkerResult | PingResult> },
+  context: { cwd: string; config: RepomixConfigMerged },
+): Promise<void> => {
+  const isBun = process.versions?.bun;
+  if (!isBun) {
+    // No need to wait for Node.js
+    return;
+  }
+
+  const maxRetries = 3;
+  const retryDelay = 50; // ms
+  let pingSuccessful = false;
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      await taskRunner.run({
+        ping: true,
+        cwd: context.cwd,
+        config: context.config,
+      });
+      logger.debug(`Worker initialization ping successful on attempt ${attempt}`);
+      pingSuccessful = true;
+      break;
+    } catch (error) {
+      logger.debug(`Worker ping failed on attempt ${attempt}/${maxRetries}:`, error);
+      if (attempt < maxRetries) {
+        logger.debug(`Waiting ${retryDelay}ms before retry...`);
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      }
+    }
+  }
+
+  if (!pingSuccessful) {
+    logger.debug('All Worker ping attempts failed, proceeding anyway...');
   }
 };

@@ -19,18 +19,37 @@ export interface DefaultActionTask {
   isStdin: boolean;
 }
 
+export interface PingTask {
+  ping: true;
+  cwd: string;
+  config: RepomixConfigMerged;
+}
+
 export interface DefaultActionWorkerResult {
   packResult: PackResult;
   config: RepomixConfigMerged;
 }
 
-export default async ({
-  directories,
-  cwd,
-  config,
-  cliOptions,
-  isStdin,
-}: DefaultActionTask): Promise<DefaultActionWorkerResult> => {
+export interface PingResult {
+  ping: true;
+  config: RepomixConfigMerged;
+}
+
+// Function overloads for better type inference
+async function defaultActionWorker(
+  task: DefaultActionTask | PingTask,
+): Promise<DefaultActionWorkerResult | PingResult> {
+  // Handle ping requests for Bun compatibility check
+  if ('ping' in task) {
+    return {
+      ping: true,
+      config: task.config,
+    };
+  }
+
+  // At this point, task is guaranteed to be DefaultActionTask
+  const { directories, cwd, config, cliOptions, isStdin } = task as DefaultActionTask;
+
   logger.trace('Worker: Using pre-loaded config:', config);
 
   // Initialize spinner in worker
@@ -81,7 +100,9 @@ export default async ({
     spinner.fail('Error during packing');
     throw error;
   }
-};
+}
+
+export default defaultActionWorker;
 
 // Export cleanup function for Tinypool teardown
 export const onWorkerTermination = async () => {
