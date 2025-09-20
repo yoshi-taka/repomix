@@ -8,8 +8,7 @@ import { calculateGitDiffMetrics } from './calculateGitDiffMetrics.js';
 import { calculateGitLogMetrics } from './calculateGitLogMetrics.js';
 import { calculateOutputMetrics } from './calculateOutputMetrics.js';
 import { calculateSelectiveFileMetrics } from './calculateSelectiveFileMetrics.js';
-import type { FileMetrics } from './workers/types.js';
-import type { UnifiedMetricsTask } from './workers/unifiedMetricsWorker.js';
+import type { TokenCountTask } from './workers/calculateMetricsWorker.js';
 
 export interface CalculateMetricsResult {
   totalFiles: number;
@@ -33,7 +32,7 @@ export const calculateMetrics = async (
     calculateOutputMetrics,
     calculateGitDiffMetrics,
     calculateGitLogMetrics,
-    taskRunner: undefined as TaskRunner<UnifiedMetricsTask, number | FileMetrics> | undefined,
+    taskRunner: undefined as TaskRunner<TokenCountTask, number> | undefined,
   },
 ): Promise<CalculateMetricsResult> => {
   progressCallback('Calculating metrics...');
@@ -41,9 +40,9 @@ export const calculateMetrics = async (
   // Initialize a single task runner for all metrics calculations
   const taskRunner =
     deps.taskRunner ??
-    initTaskRunner<UnifiedMetricsTask, number | FileMetrics>({
+    initTaskRunner<TokenCountTask, number>({
       numOfTasks: processedFiles.length,
-      workerPath: new URL('../../../lib/core/metrics/workers/unifiedMetricsWorker.js', import.meta.url).href,
+      workerPath: new URL('../../../lib/core/metrics/workers/calculateMetricsWorker.js', import.meta.url).href,
       runtime: 'worker_threads',
     });
 

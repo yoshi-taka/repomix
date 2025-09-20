@@ -1,10 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { calculateOutputMetrics } from '../../../src/core/metrics/calculateOutputMetrics.js';
-import {
-  type OutputMetricsTask,
-  type UnifiedMetricsTask,
-  calculateUnifiedMetrics,
-} from '../../../src/core/metrics/workers/unifiedMetricsWorker.js';
+import { type TokenCountTask, countTokens } from '../../../src/core/metrics/workers/calculateMetricsWorker.js';
 import { logger } from '../../../src/shared/logger.js';
 import type { WorkerOptions } from '../../../src/shared/processConcurrency.js';
 
@@ -13,7 +9,7 @@ vi.mock('../../../src/shared/logger');
 const mockInitTaskRunner = <T, R>(_options: WorkerOptions) => {
   return {
     run: async (task: T) => {
-      return (await calculateUnifiedMetrics(task as UnifiedMetricsTask)) as R;
+      return (await countTokens(task as TokenCountTask)) as R;
     },
     cleanup: async () => {
       // Mock cleanup - no-op for tests
@@ -154,7 +150,7 @@ describe('calculateOutputMetrics', () => {
     const mockChunkTrackingTaskRunner = <T, R>(_options: WorkerOptions) => {
       return {
         run: async (task: T) => {
-          const outputTask = task as OutputMetricsTask;
+          const outputTask = task as TokenCountTask;
           processedChunks.push(outputTask.content);
           return outputTask.content.length as R;
         },

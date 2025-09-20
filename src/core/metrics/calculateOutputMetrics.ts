@@ -1,8 +1,7 @@
 import type { TiktokenEncoding } from 'tiktoken';
 import { logger } from '../../shared/logger.js';
 import type { TaskRunner } from '../../shared/processConcurrency.js';
-import type { FileMetrics } from './workers/types.js';
-import type { UnifiedMetricsTask } from './workers/unifiedMetricsWorker.js';
+import type { TokenCountTask } from './workers/calculateMetricsWorker.js';
 
 const CHUNK_SIZE = 1000;
 const MIN_CONTENT_LENGTH_FOR_PARALLEL = 1_000_000; // 1000KB
@@ -11,7 +10,7 @@ export const calculateOutputMetrics = async (
   content: string,
   encoding: TiktokenEncoding,
   path: string | undefined,
-  deps: { taskRunner: TaskRunner<UnifiedMetricsTask, number | FileMetrics> },
+  deps: { taskRunner: TaskRunner<TokenCountTask, number> },
 ): Promise<number> => {
   const shouldRunInParallel = content.length > MIN_CONTENT_LENGTH_FOR_PARALLEL;
 
@@ -33,13 +32,11 @@ export const calculateOutputMetrics = async (
       // Process chunks in parallel
       const chunkResults = await Promise.all(
         chunks.map(async (chunk, index) => {
-          const result = await deps.taskRunner.run({
-            type: 'output',
+          return deps.taskRunner.run({
             content: chunk,
             encoding,
             path: path ? `${path}-chunk-${index}` : undefined,
           });
-          return result as number; // Output tasks always return numbers
         }),
       );
 
@@ -47,12 +44,11 @@ export const calculateOutputMetrics = async (
       result = chunkResults.reduce((sum, count) => sum + count, 0);
     } else {
       // Process small content directly
-      result = (await deps.taskRunner.run({
-        type: 'output',
+      result = await deps.taskRunner.run({
         content,
         encoding,
         path,
-      })) as number;
+      });
     }
 
     const endTime = process.hrtime.bigint();
