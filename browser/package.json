@@ -3,6 +3,7 @@
   "name": "repomix",
   "description": "A browser extension that adds a Repomix button to GitHub repositories",
   "scripts": {
+    "prepare": "wxt prepare",
     "dev": "wxt",
     "dev:firefox": "wxt -b firefox",
     "build": "wxt build",
