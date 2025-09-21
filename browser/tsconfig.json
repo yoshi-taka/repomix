@@ -1,5 +1,4 @@
 {
-  "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
     "strict": true,
     "target": "esnext",
@@ -14,6 +13,14 @@
     "noImplicitAny": true,
     "removeComments": true,
     "skipLibCheck": true,
-    "sourceMap": true
-  }
+    "sourceMap": true,
+    "types": ["chrome", "node"]
+  },
+  "include": [
+    "entrypoints/**/*",
+    "scripts/**/*",
+    "tests/**/*",
+    "wxt.config.ts",
+    "types.d.ts"
+  ]
 }
