@@ -45,7 +45,7 @@ describe('permissionCheck', () => {
       vi.mocked(fs.readdir).mockResolvedValue([]);
 
       // Mock mixed permission check results
-      vi.mocked(fs.access).mockImplementation(async (path, mode) => {
+      vi.mocked(fs.access).mockImplementation(async (_path, mode) => {
         if (mode === constants.R_OK || mode === constants.X_OK) {
           return Promise.resolve(undefined);
         }
@@ -201,7 +201,7 @@ describe('permissionCheck', () => {
       vi.mocked(fs.readdir).mockResolvedValue([]);
 
       // Mock access to fail for write permission only
-      vi.mocked(fs.access).mockImplementation(async (path, mode) => {
+      vi.mocked(fs.access).mockImplementation(async (_path, mode) => {
         if (mode === constants.W_OK) {
           throw new Error('Write permission denied');
         }

@@ -104,7 +104,7 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.2.4",
     "@secretlint/types": "^9.3.4",
     "@types/node": "^22.14.1",
     "@types/strip-comments": "^2.0.4",
