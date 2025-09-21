@@ -18,7 +18,7 @@
     "lint": "npm run lint-tsc",
     "lint-tsc": "tsgo --noEmit",
     "test": "vitest",
-    "archive": "git archive HEAD -o storage/source.zip"
+    "archive": "git archive HEAD -o ./storage/source.zip"
   },
   "keywords": [
     "chrome",
@@ -34,7 +34,6 @@
   "devDependencies": {
     "@types/chrome": "^0.1.1",
     "@types/node": "^24.5.2",
-    "@types/webextension-polyfill": "^0.12.3",
     "@typescript/native-preview": "^7.0.0-dev.20250824.1",
     "jsdom": "^27.0.0",
     "sharp": "^0.34.3",
@@ -43,9 +42,6 @@
     "vitest": "^3.2.4",
     "wxt": "^0.20.11"
   },
-  "browserslist": [
-    "last 2 versions, not dead, > 0.2%"
-  ],
   "engines": {
     "node": ">=24.0.1"
   }
