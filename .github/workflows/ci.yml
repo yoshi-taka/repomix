@@ -127,7 +127,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # ratchet:actions/checkout@v4
-      - uses: crate-ci/typos@85f62a8a84f939ae994ab3763f01a0296d61a7ee # ratchet:crate-ci/typos@master
+      - uses: crate-ci/typos@2abc5d928aaa84e3a901dda4f148299486dcd818 # ratchet:crate-ci/typos@master
 
   test:
     name: Test
