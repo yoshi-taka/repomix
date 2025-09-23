@@ -25,9 +25,7 @@ const props = defineProps<{
   isValid?: boolean;
 }>();
 
-const emit = defineEmits<{
-  (e: 'cancel'): void;
-}>();
+const emit = defineEmits<(e: 'cancel') => void>();
 
 function handleClick(event: MouseEvent) {
   if (props.loading) {
