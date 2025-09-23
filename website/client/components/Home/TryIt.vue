@@ -92,6 +92,7 @@
           :result="result"
           :loading="loading"
           :error="error"
+          :error-type="errorType"
           :repository-url="inputRepositoryUrl"
           @repack="handleRepack"
         />
@@ -129,6 +130,7 @@ const {
   // Request states
   loading,
   error,
+  errorType,
   result,
   hasExecuted,
 

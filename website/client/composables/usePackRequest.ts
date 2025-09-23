@@ -21,12 +21,14 @@ export function usePackRequest() {
   // Request states
   const loading = ref(false);
   const error = ref<string | null>(null);
+  const errorType = ref<'error' | 'warning'>('error');
   const result = ref<PackResult | null>(null);
   const hasExecuted = ref(false);
 
   // Request controller for cancellation
   let requestController: AbortController | null = null;
-  const TIMEOUT_MS = 30_000;
+  let isTimeout = false;
+  const TIMEOUT_MS = 2_000;
 
   // Computed validation
   const isSubmitValid = computed(() => {
@@ -51,6 +53,7 @@ export function usePackRequest() {
 
   function resetRequest() {
     error.value = null;
+    errorType.value = 'error';
     result.value = null;
     hasExecuted.value = false;
   }
@@ -66,13 +69,16 @@ export function usePackRequest() {
 
     loading.value = true;
     error.value = null;
+    errorType.value = 'error';
     result.value = null;
     hasExecuted.value = true;
+    isTimeout = false;
     inputRepositoryUrl.value = inputUrl.value;
 
     const timeoutId = setTimeout(() => {
       if (requestController) {
-        requestController.abort('Request timed out');
+        isTimeout = true;
+        requestController.abort('timeout');
       }
     }, TIMEOUT_MS);
 
@@ -87,6 +93,10 @@ export function usePackRequest() {
           },
           onError: (errorMessage) => {
             error.value = errorMessage;
+          },
+          onAbort: (message) => {
+            error.value = message;
+            errorType.value = 'warning';
           },
           signal: requestController.signal,
           file: mode.value === 'file' || mode.value === 'folder' ? uploadedFile.value || undefined : undefined,
@@ -167,6 +177,7 @@ export function usePackRequest() {
     // Request states
     loading,
     error,
+    errorType,
     result,
     hasExecuted,
 
