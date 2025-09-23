@@ -17,17 +17,19 @@
   </button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import PackIcon from './PackIcon.vue';
 
-const props = defineProps({
-  loading: Boolean,
-  isValid: Boolean,
-});
+const props = defineProps<{
+  loading?: boolean;
+  isValid?: boolean;
+}>();
 
-const emit = defineEmits(['cancel']);
+const emit = defineEmits<{
+  (e: 'cancel'): void;
+}>();
 
-function handleClick(event) {
+function handleClick(event: MouseEvent) {
   if (props.loading) {
     event.preventDefault();
     event.stopPropagation();

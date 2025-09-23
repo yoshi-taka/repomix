@@ -49,13 +49,13 @@ export async function handlePackRequest(
   } catch (err) {
     // Check for abort/timeout first, regardless of error type
     if (signal?.aborted) {
-      const isTimeout = String(signal?.reason) === 'timeout';
+      const isTimeout = signal?.reason === 'timeout';
       if (isTimeout) {
         onAbort?.('Request timed out.\nPlease consider using Include Patterns or Ignore Patterns to reduce the scope.');
         return;
       }
 
-      const isCancelled = String(signal?.reason) === 'cancel';
+      const isCancelled = signal?.reason === 'cancel';
       if (isCancelled) {
         onAbort?.('Request was cancelled.');
         return;
