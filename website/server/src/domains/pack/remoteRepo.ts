@@ -105,9 +105,15 @@ export async function processRemoteRepo(repoUrl: string, format: string, options
   } catch (error) {
     console.error('Error in remote repository processing:', error);
     if (error instanceof Error) {
-      throw new AppError(`Remote repository processing failed.\nThe repository may not be public or there may be an issue with Repomix.\n\n${error.message}`, 500);
+      throw new AppError(
+        `Remote repository processing failed.\nThe repository may not be public or there may be an issue with Repomix.\n\n${error.message}`,
+        500,
+      );
     }
-    throw new AppError('Remote repository processing failed.\nThe repository may not be public or there may be an issue with Repomix.', 500);
+    throw new AppError(
+      'Remote repository processing failed.\nThe repository may not be public or there may be an issue with Repomix.',
+      500,
+    );
   } finally {
     // Clean up the output file
     try {
