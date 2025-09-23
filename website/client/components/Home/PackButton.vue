@@ -28,7 +28,8 @@ const props = defineProps<{
 const emit = defineEmits<(e: 'cancel') => void>();
 
 function handleClick(event: MouseEvent) {
-  if (props.loading) {
+  // Only handle cancel on actual mouse clicks, not on form submission (Enter key)
+  if (props.loading && event.detail > 0) {
     event.preventDefault();
     event.stopPropagation();
     emit('cancel');
