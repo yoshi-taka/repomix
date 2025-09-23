@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AlertTriangle, AlertCircle, Copy } from 'lucide-vue-next';
+import { AlertCircle, AlertTriangle, Copy } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 
 const props = defineProps<{

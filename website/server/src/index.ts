@@ -31,7 +31,7 @@ app.use('/*', corsMiddleware);
 app.use(compress());
 
 // Set timeout for API routes
-app.use('/api', timeout(30000));
+app.use('/api', timeout(35_000));
 
 // Setup custom logger
 app.use('*', cloudLoggerMiddleware());

@@ -1,11 +1,18 @@
 <template>
   <button
     class="pack-button"
-    :disabled="!isValid || loading"
-    aria-label="Pack repository"
+    :class="{ 'pack-button--loading': loading }"
+    :disabled="!isValid && !loading"
+    :aria-label="loading ? 'Cancel processing' : 'Pack repository'"
     type="submit"
+    @click="handleClick"
   >
-    {{ loading ? 'Processing...' : 'Pack' }}
+    <span class="pack-button__text pack-button__text--normal">
+      {{ loading ? 'Processing...' : 'Pack' }}
+    </span>
+    <span class="pack-button__text pack-button__text--hover">
+      {{ loading ? 'Cancel' : 'Pack' }}
+    </span>
     <PackIcon v-if="!loading" :size="20" />
   </button>
 </template>
@@ -13,10 +20,20 @@
 <script setup>
 import PackIcon from './PackIcon.vue';
 
-defineProps({
+const props = defineProps({
   loading: Boolean,
   isValid: Boolean,
 });
+
+const emit = defineEmits(['cancel']);
+
+function handleClick(event) {
+  if (props.loading) {
+    event.preventDefault();
+    event.stopPropagation();
+    emit('cancel');
+  }
+}
 </script>
 
 <style scoped>
@@ -36,16 +53,38 @@ defineProps({
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-
+  position: relative;
 }
 
 .pack-button:hover:not(:disabled) {
   background: var(--vp-c-brand-2);
 }
 
+.pack-button--loading:hover {
+  background: var(--vp-c-danger-1);
+}
+
 .pack-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.pack-button__text {
+  transition: opacity 0.2s ease;
+}
+
+.pack-button__text--hover {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pack-button--loading:hover .pack-button__text--normal {
+  opacity: 0;
+}
+
+.pack-button--loading:hover .pack-button__text--hover {
+  opacity: 1;
 }
 
 .pack-button-icon {

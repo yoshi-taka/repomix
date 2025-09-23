@@ -27,8 +27,7 @@ export function usePackRequest() {
 
   // Request controller for cancellation
   let requestController: AbortController | null = null;
-  let isTimeout = false;
-  const TIMEOUT_MS = 2_000;
+  const TIMEOUT_MS = 30_000;
 
   // Computed validation
   const isSubmitValid = computed(() => {
@@ -72,12 +71,11 @@ export function usePackRequest() {
     errorType.value = 'error';
     result.value = null;
     hasExecuted.value = true;
-    isTimeout = false;
     inputRepositoryUrl.value = inputUrl.value;
 
+    // Set up automatic timeout
     const timeoutId = setTimeout(() => {
       if (requestController) {
-        isTimeout = true;
         requestController.abort('timeout');
       }
     }, TIMEOUT_MS);
@@ -142,7 +140,7 @@ export function usePackRequest() {
 
   function cancelRequest() {
     if (requestController) {
-      requestController.abort();
+      requestController.abort('cancel');
       requestController = null;
     }
     loading.value = false;

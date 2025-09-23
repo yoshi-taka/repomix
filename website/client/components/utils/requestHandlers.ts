@@ -55,7 +55,13 @@ export async function handlePackRequest(
         return;
       }
 
-      onAbort?.('Request was cancelled');
+      const isCancelled = String(signal?.reason) === 'cancel';
+      if (isCancelled) {
+        onAbort?.('Request was cancelled.');
+        return;
+      }
+
+      onAbort?.('Request was cancelled with an unknown reason.');
       return;
     }
 
