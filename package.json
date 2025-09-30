@@ -78,7 +78,7 @@
   ],
   "type": "module",
   "dependencies": {
-    "@clack/prompts": "^0.10.1",
+    "@clack/prompts": "^0.11.0",
     "@modelcontextprotocol/sdk": "^1.18.2",
     "@secretlint/core": "^9.3.1",
     "@secretlint/secretlint-rule-preset-recommend": "^9.3.1",
@@ -89,7 +89,7 @@
     "git-url-parse": "^16.1.0",
     "globby": "^14.1.0",
     "handlebars": "^4.7.8",
-    "iconv-lite": "^0.6.3",
+    "iconv-lite": "^0.7.0",
     "istextorbinary": "^9.5.0",
     "jschardet": "^3.1.4",
     "json5": "^2.2.3",
