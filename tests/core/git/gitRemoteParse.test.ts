@@ -49,6 +49,24 @@ describe('remoteAction functions', () => {
       });
     });
 
+    test('should handle Azure DevOps SSH URLs', () => {
+      const azureDevOpsUrl = 'git@ssh.dev.azure.com:v3/organization/project/repo';
+      const parsed = parseRemoteValue(azureDevOpsUrl);
+      expect(parsed).toEqual({
+        repoUrl: azureDevOpsUrl,
+        remoteBranch: undefined,
+      });
+    });
+
+    test('should handle Azure DevOps HTTPS URLs', () => {
+      const azureDevOpsUrl = 'https://dev.azure.com/organization/project/_git/repo';
+      const parsed = parseRemoteValue(azureDevOpsUrl);
+      expect(parsed).toEqual({
+        repoUrl: azureDevOpsUrl,
+        remoteBranch: undefined,
+      });
+    });
+
     test('should get correct branch name from url', () => {
       expect(parseRemoteValue('https://github.com/username/repo/tree/branchname')).toEqual({
         repoUrl: 'https://github.com/username/repo.git',

@@ -34,17 +34,33 @@ export const parseRemoteValue = (
   try {
     const parsedFields = gitUrlParse(remoteValue, refs) as IGitUrl;
 
-    // This will make parsedFields.toString() automatically append '.git' to the returned url
-    parsedFields.git_suffix = true;
+    let repoUrl: string;
 
-    const ownerSlashRepo =
-      parsedFields.full_name.split('/').length > 1 ? parsedFields.full_name.split('/').slice(-2).join('/') : '';
+    switch (parsedFields.source) {
+      // Azure DevOps uses special URL format:
+      // - SSH: git@ssh.dev.azure.com:v3/org/project/repo
+      // - HTTPS: https://dev.azure.com/organization/project/_git/repo
+      // The parser's toString() method doesn't preserve the full path, so use the original URL
+      case 'dev.azure.com':
+      case 'azure.com':
+        repoUrl = remoteValue;
+        break;
 
-    if (ownerSlashRepo !== '' && !isValidShorthand(ownerSlashRepo)) {
-      throw new RepomixError('Invalid owner/repo in repo URL');
+      default: {
+        // This will make parsedFields.toString() automatically append '.git' to the returned url
+        parsedFields.git_suffix = true;
+
+        const ownerSlashRepo =
+          parsedFields.full_name.split('/').length > 1 ? parsedFields.full_name.split('/').slice(-2).join('/') : '';
+
+        if (ownerSlashRepo !== '' && !isValidShorthand(ownerSlashRepo)) {
+          throw new RepomixError('Invalid owner/repo in repo URL');
+        }
+
+        repoUrl = parsedFields.toString(parsedFields.protocol);
+        break;
+      }
     }
-
-    const repoUrl = parsedFields.toString(parsedFields.protocol);
 
     if (parsedFields.ref) {
       return {
