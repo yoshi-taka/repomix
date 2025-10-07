@@ -67,6 +67,15 @@ describe('remoteAction functions', () => {
       });
     });
 
+    test('should handle legacy Visual Studio Team Services URLs', () => {
+      const vstsUrl = 'https://myorg.visualstudio.com/myproject/_git/myrepo';
+      const parsed = parseRemoteValue(vstsUrl);
+      expect(parsed).toEqual({
+        repoUrl: vstsUrl,
+        remoteBranch: undefined,
+      });
+    });
+
     test('should get correct branch name from url', () => {
       expect(parseRemoteValue('https://github.com/username/repo/tree/branchname')).toEqual({
         repoUrl: 'https://github.com/username/repo.git',
