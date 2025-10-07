@@ -166,7 +166,7 @@ describe('TypeScript File Parsing', () => {
         reset(_node: Node): void {},
         resetTo(_cursor: TreeCursor): void {},
         copy(): TreeCursor {
-          return { ...this };
+          return { ...this } as TreeCursor;
         },
         delete(): void {},
       };
