@@ -168,6 +168,36 @@ dist/**
 
 For the complete list, see [defaultIgnore.ts](https://github.com/yamadashy/repomix/blob/main/src/config/defaultIgnore.ts)
 
+## Binary Files Handling
+
+Binary files (such as images, PDFs, compiled binaries, archives, etc.) are handled specially to maintain an efficient, text-based output:
+
+- **File Contents**: Binary files are **not included** in the packed output to keep the file text-based and efficient for AI processing
+- **Directory Structure**: Binary file **paths are listed** in the directory structure section, providing a complete overview of your repository
+
+This approach ensures you get a complete view of your repository structure while maintaining an efficient, text-based output optimized for AI consumption.
+
+**Example:**
+
+If your repository contains `logo.png` and `app.jar`:
+- They will appear in the Directory Structure section
+- Their contents will not be included in the Files section
+
+**Directory Structure Output:**
+```
+src/
+  index.ts
+  utils.ts
+assets/
+  logo.png
+build/
+  app.jar
+```
+
+This way, AI tools can understand that these binary files exist in your project structure without processing their binary contents.
+
+**Note:** You can control the maximum file size threshold using the `input.maxFileSize` configuration option (default: 50MB). Files larger than this limit will be skipped entirely.
+
 ## Advanced Features
 
 ### Code Compression
