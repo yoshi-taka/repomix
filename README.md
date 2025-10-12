@@ -1005,6 +1005,16 @@ Repomix will automatically search for configuration files in the following prior
 2. **JavaScript/ES Module** (`repomix.config.js`, `repomix.config.mjs`, `repomix.config.cjs`)
 3. **JSON** (`repomix.config.json5`, `repomix.config.jsonc`, `repomix.config.json`)
 
+#### JSON Configuration
+
+Create a `repomix.config.json` file in your project root:
+
+```bash
+repomix --init
+```
+
+This will create a `repomix.config.json` file with default settings.
+
 #### TypeScript Configuration (Recommended)
 
 TypeScript configuration files provide the best developer experience with full type checking and IDE support.
@@ -1106,14 +1116,6 @@ module.exports = {
     style: 'xml',
   },
 };
-```
-
-#### JSON Configuration
-
-Create a `repomix.config.json` file in your project root:
-
-```bash
-repomix --init
 ```
 
 ### Configuration Options
