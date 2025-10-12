@@ -1003,9 +1003,7 @@ Repomix will automatically search for configuration files in the following prior
 
 1. **TypeScript** (`repomix.config.ts`, `repomix.config.mts`, `repomix.config.cts`)
 2. **JavaScript/ES Module** (`repomix.config.js`, `repomix.config.mjs`, `repomix.config.cjs`)
-3. **JSON5** (`repomix.config.json5`)
-4. **JSONC** (`repomix.config.jsonc`)
-5. **JSON** (`repomix.config.json`)
+3. **JSON** (`repomix.config.json5`, `repomix.config.jsonc`, `repomix.config.json`)
 
 #### TypeScript Configuration (Recommended)
 
