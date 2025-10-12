@@ -1048,7 +1048,6 @@ export default defineConfig({
 **Benefits:**
 - ✅ Full TypeScript type checking in your IDE
 - ✅ Excellent IDE autocomplete and IntelliSense
-- ✅ Real-time error detection while editing
 - ✅ Use dynamic values (timestamps, environment variables, etc.)
 
 **Dynamic Values Example:**
