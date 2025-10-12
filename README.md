@@ -1038,9 +1038,9 @@ export default defineConfig({
 ```
 
 **Benefits:**
-- ✅ Full TypeScript type checking
+- ✅ Full TypeScript type checking in your IDE
 - ✅ Excellent IDE autocomplete and IntelliSense
-- ✅ Compile-time error detection
+- ✅ Real-time error detection while editing
 - ✅ Use dynamic values (timestamps, environment variables, etc.)
 
 **Dynamic Values Example:**
