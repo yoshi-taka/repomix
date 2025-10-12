@@ -196,9 +196,15 @@ O Repomix procura os arquivos de configuração na seguinte ordem:
    - TypeScript: `repomix.config.ts`, `repomix.config.mts`, `repomix.config.cts`
    - JavaScript: `repomix.config.js`, `repomix.config.mjs`, `repomix.config.cjs`
    - JSON: `repomix.config.json5`, `repomix.config.jsonc`, `repomix.config.json`
-2. Arquivo de configuração global:
-   - Windows: `%LOCALAPPDATA%\Repomix\repomix.config.json`
-   - macOS/Linux: `~/.config/repomix/repomix.config.json`
+2. Arquivo de configuração global (ordem de prioridade: TS > JS > JSON)
+   - Windows:
+     - TypeScript: `%LOCALAPPDATA%\Repomix\repomix.config.ts`, `.mts`, `.cts`
+     - JavaScript: `%LOCALAPPDATA%\Repomix\repomix.config.js`, `.mjs`, `.cjs`
+     - JSON: `%LOCALAPPDATA%\Repomix\repomix.config.json5`, `.jsonc`, `.json`
+   - macOS/Linux:
+     - TypeScript: `~/.config/repomix/repomix.config.ts`, `.mts`, `.cts`
+     - JavaScript: `~/.config/repomix/repomix.config.js`, `.mjs`, `.cjs`
+     - JSON: `~/.config/repomix/repomix.config.json5`, `.jsonc`, `.json`
 
 As opções de linha de comando têm precedência sobre as configurações do arquivo.
 

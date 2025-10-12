@@ -196,9 +196,15 @@ Repomix mencari file konfigurasi dalam urutan berikut:
    - TypeScript: `repomix.config.ts`, `repomix.config.mts`, `repomix.config.cts`
    - JavaScript: `repomix.config.js`, `repomix.config.mjs`, `repomix.config.cjs`
    - JSON: `repomix.config.json5`, `repomix.config.jsonc`, `repomix.config.json`
-2. File konfigurasi global:
-   - Windows: `%LOCALAPPDATA%\Repomix\repomix.config.json`
-   - macOS/Linux: `~/.config/repomix/repomix.config.json`
+2. File konfigurasi global (urutan prioritas: TS > JS > JSON)
+   - Windows:
+     - TypeScript: `%LOCALAPPDATA%\Repomix\repomix.config.ts`, `.mts`, `.cts`
+     - JavaScript: `%LOCALAPPDATA%\Repomix\repomix.config.js`, `.mjs`, `.cjs`
+     - JSON: `%LOCALAPPDATA%\Repomix\repomix.config.json5`, `.jsonc`, `.json`
+   - macOS/Linux:
+     - TypeScript: `~/.config/repomix/repomix.config.ts`, `.mts`, `.cts`
+     - JavaScript: `~/.config/repomix/repomix.config.js`, `.mjs`, `.cjs`
+     - JSON: `~/.config/repomix/repomix.config.json5`, `.jsonc`, `.json`
 
 Opsi baris perintah memiliki prioritas lebih tinggi daripada pengaturan file konfigurasi.
 

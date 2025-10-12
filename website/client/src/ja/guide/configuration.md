@@ -196,9 +196,15 @@ Repomixは以下の順序で設定ファイルを探します：
    - TypeScript: `repomix.config.ts`、`repomix.config.mts`、`repomix.config.cts`
    - JavaScript: `repomix.config.js`、`repomix.config.mjs`、`repomix.config.cjs`
    - JSON: `repomix.config.json5`、`repomix.config.jsonc`、`repomix.config.json`
-2. グローバル設定ファイル：
-   - Windows: `%LOCALAPPDATA%\Repomix\repomix.config.json`
-   - macOS/Linux: `~/.config/repomix/repomix.config.json`
+2. グローバル設定ファイル（優先順位: TS > JS > JSON）
+   - Windows:
+     - TypeScript: `%LOCALAPPDATA%\Repomix\repomix.config.ts`、`.mts`、`.cts`
+     - JavaScript: `%LOCALAPPDATA%\Repomix\repomix.config.js`、`.mjs`、`.cjs`
+     - JSON: `%LOCALAPPDATA%\Repomix\repomix.config.json5`、`.jsonc`、`.json`
+   - macOS/Linux:
+     - TypeScript: `~/.config/repomix/repomix.config.ts`、`.mts`、`.cts`
+     - JavaScript: `~/.config/repomix/repomix.config.js`、`.mjs`、`.cjs`
+     - JSON: `~/.config/repomix/repomix.config.json5`、`.jsonc`、`.json`
 
 コマンドラインオプションは設定ファイルの設定よりも優先されます。
 

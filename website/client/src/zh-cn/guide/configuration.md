@@ -196,9 +196,15 @@ Repomix按以下顺序查找配置文件：
    - TypeScript: `repomix.config.ts`, `repomix.config.mts`, `repomix.config.cts`
    - JavaScript: `repomix.config.js`, `repomix.config.mjs`, `repomix.config.cjs`
    - JSON: `repomix.config.json5`, `repomix.config.jsonc`, `repomix.config.json`
-2. 全局配置文件：
-   - Windows：`%LOCALAPPDATA%\Repomix\repomix.config.json`
-   - macOS/Linux：`~/.config/repomix/repomix.config.json`
+2. 全局配置文件（优先级：TS > JS > JSON）
+   - Windows：
+     - TypeScript: `%LOCALAPPDATA%\Repomix\repomix.config.ts`, `.mts`, `.cts`
+     - JavaScript: `%LOCALAPPDATA%\Repomix\repomix.config.js`, `.mjs`, `.cjs`
+     - JSON: `%LOCALAPPDATA%\Repomix\repomix.config.json5`, `.jsonc`, `.json`
+   - macOS/Linux：
+     - TypeScript: `~/.config/repomix/repomix.config.ts`, `.mts`, `.cts`
+     - JavaScript: `~/.config/repomix/repomix.config.js`, `.mjs`, `.cjs`
+     - JSON: `~/.config/repomix/repomix.config.json5`, `.jsonc`, `.json`
 
 命令行选项优先于配置文件设置。
 

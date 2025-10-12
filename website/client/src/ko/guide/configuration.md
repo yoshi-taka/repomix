@@ -196,9 +196,15 @@ Repomix는 다음 순서로 설정 파일을 찾습니다:
    - TypeScript: `repomix.config.ts`, `repomix.config.mts`, `repomix.config.cts`
    - JavaScript: `repomix.config.js`, `repomix.config.mjs`, `repomix.config.cjs`
    - JSON: `repomix.config.json5`, `repomix.config.jsonc`, `repomix.config.json`
-2. 전역 설정 파일:
-   - Windows: `%LOCALAPPDATA%\Repomix\repomix.config.json`
-   - macOS/Linux: `~/.config/repomix/repomix.config.json`
+2. 전역 설정 파일 (우선순위: TS > JS > JSON)
+   - Windows:
+     - TypeScript: `%LOCALAPPDATA%\Repomix\repomix.config.ts`, `.mts`, `.cts`
+     - JavaScript: `%LOCALAPPDATA%\Repomix\repomix.config.js`, `.mjs`, `.cjs`
+     - JSON: `%LOCALAPPDATA%\Repomix\repomix.config.json5`, `.jsonc`, `.json`
+   - macOS/Linux:
+     - TypeScript: `~/.config/repomix/repomix.config.ts`, `.mts`, `.cts`
+     - JavaScript: `~/.config/repomix/repomix.config.js`, `.mjs`, `.cjs`
+     - JSON: `~/.config/repomix/repomix.config.json5`, `.jsonc`, `.json`
 
 명령줄 옵션은 설정 파일의 설정보다 우선합니다.
 
