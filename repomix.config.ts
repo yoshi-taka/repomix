@@ -1,3 +1,6 @@
+// Note: Normally you would import from 'repomix', but since this is the repomix project itself,
+// we import directly from the source index file.
+// For your projects, use: import { defineConfig } from 'repomix';
 import { defineConfig } from './src/index.js';
 
 export default defineConfig({
