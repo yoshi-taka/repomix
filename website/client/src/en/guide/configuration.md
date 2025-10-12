@@ -14,7 +14,17 @@ Repomix supports multiple configuration file formats. When searching for a confi
 
 ### TypeScript Configuration (Recommended)
 
-TypeScript configuration files provide the best developer experience with full type checking and IDE support:
+TypeScript configuration files provide the best developer experience with full type checking and IDE support.
+
+**Installation:**
+
+To use TypeScript or JavaScript configuration with `defineConfig`, you need to install Repomix as a dev dependency:
+
+```bash
+npm install -D repomix
+```
+
+**Example:**
 
 ```typescript
 // repomix.config.ts
@@ -33,7 +43,7 @@ export default defineConfig({
 });
 ```
 
-**Benefits of TypeScript Configuration:**
+**Benefits:**
 - ✅ Full TypeScript type checking
 - ✅ Excellent IDE autocomplete and IntelliSense
 - ✅ Compile-time error detection

@@ -14,7 +14,17 @@ Repomixは複数の設定ファイル形式をサポートしています。設�
 
 ### TypeScript設定（推奨）
 
-TypeScript設定ファイルは、完全な型チェックとIDEサポートにより、最高の開発者体験を提供します：
+TypeScript設定ファイルは、完全な型チェックとIDEサポートにより、最高の開発者体験を提供します。
+
+**インストール：**
+
+TypeScriptまたはJavaScript設定で `defineConfig` を使用するには、Repomixを開発用依存関係としてインストールする必要があります：
+
+```bash
+npm install -D repomix
+```
+
+**例：**
 
 ```typescript
 // repomix.config.ts
@@ -33,7 +43,7 @@ export default defineConfig({
 });
 ```
 
-**TypeScript設定のメリット：**
+**メリット：**
 - ✅ 完全なTypeScript型チェック
 - ✅ 優れたIDE自動補完とIntelliSense
 - ✅ コンパイル時のエラー検出
