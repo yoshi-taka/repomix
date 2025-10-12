@@ -1,114 +1,19 @@
 # 設定
 
-Repomixは設定ファイルまたはコマンドラインオプションを使用して設定できます。設定ファイルを使用することで、コードベースの処理と出力方法をカスタマイズできます。
+Repomixは設定ファイル（`repomix.config.json`）またはコマンドラインオプションを使用して設定できます。設定ファイルを使用することで、コードベースの処理と出力方法をカスタマイズできます。
 
-## 設定ファイルの形式
+## クイックスタート
 
-Repomixは複数の設定ファイル形式をサポートしています。設定ファイルを検索する際、Repomixは以下の優先順位でチェックします：
-
-1. **TypeScript** (`repomix.config.ts`、`repomix.config.mts`、`repomix.config.cts`)
-2. **JavaScript/ES Module** (`repomix.config.js`、`repomix.config.mjs`、`repomix.config.cjs`)
-3. **JSON5** (`repomix.config.json5`)
-4. **JSONC** (`repomix.config.jsonc`)
-5. **JSON** (`repomix.config.json`)
-
-### TypeScript設定（推奨）
-
-TypeScript設定ファイルは、完全な型チェックとIDEサポートにより、最高の開発者体験を提供します。
-
-**インストール：**
-
-TypeScriptまたはJavaScript設定で `defineConfig` を使用するには、Repomixを開発用依存関係としてインストールする必要があります：
-
-```bash
-npm install -D repomix
-```
-
-**例：**
-
-```typescript
-// repomix.config.ts
-import { defineConfig } from 'repomix';
-
-export default defineConfig({
-  output: {
-    // タイムスタンプなどの動的な値を使用
-    filePath: `output-${new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-')}.xml`,
-    style: 'xml',
-    removeComments: true,
-  },
-  ignore: {
-    customPatterns: ['**/node_modules/**', '**/dist/**'],
-  },
-});
-```
-
-**メリット：**
-- ✅ 完全なTypeScript型チェック
-- ✅ 優れたIDE自動補完とIntelliSense
-- ✅ コンパイル時のエラー検出
-- ✅ 動的な値（タイムスタンプ、環境変数など）の使用が可能
-
-### JavaScript設定
-
-JavaScript設定ファイルも動的な値と型サポートを提供します：
-
-**ES Moduleの例：**
-
-```javascript
-// repomix.config.js
-import { defineConfig } from 'repomix';
-
-export default defineConfig({
-  output: {
-    filePath: `output-${new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-')}.xml`,
-    style: 'xml',
-  },
-  ignore: {
-    customPatterns: ['**/node_modules/**', '**/dist/**'],
-  },
-});
-```
-
-**CommonJSの例：**
-
-```javascript
-// repomix.config.cjs
-module.exports = {
-  output: {
-    // 環境変数を使用
-    filePath: process.env.CI ? 'ci-output.xml' : 'local-output.xml',
-    style: 'xml',
-  },
-  ignore: {
-    customPatterns: ['**/build/**'],
-  },
-};
-```
-
-### JSON設定
-
-JSON形式の設定ファイルも使用できます。プロジェクトディレクトリに`repomix.config.json`ファイルを作成します：
-
+プロジェクトディレクトリに設定ファイルを作成します：
 ```bash
 repomix --init
 ```
 
-これにより、デフォルト設定の`repomix.config.json`ファイルが作成されます。
-
-### グローバル設定
-
-ローカル設定が見つからない場合のフォールバックとして使用されるグローバル設定ファイルを作成できます：
+これにより、デフォルト設定の`repomix.config.json`ファイルが作成されます。また、ローカル設定が見つからない場合のフォールバックとして使用されるグローバル設定ファイルを作成することもできます：
 
 ```bash
 repomix --init --global
 ```
-
-グローバル設定ファイルは以下の場所に作成されます：
-- Windows: `%LOCALAPPDATA%\Repomix\repomix.config.json`
-- macOS/Linux: `$XDG_CONFIG_HOME/repomix/repomix.config.json` または `~/.config/repomix/repomix.config.json`
-
-注：ローカル設定（存在する場合）はグローバル設定よりも優先されます。
 
 ## 設定オプション
 
