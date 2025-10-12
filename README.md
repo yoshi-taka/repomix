@@ -1027,8 +1027,7 @@ import { defineConfig } from 'repomix';
 
 export default defineConfig({
   output: {
-    // Use dynamic values like timestamps
-    filePath: `output-${new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-')}.xml`,
+    filePath: 'output.xml',
     style: 'xml',
     removeComments: true,
   },
@@ -1044,6 +1043,23 @@ export default defineConfig({
 - ✅ Compile-time error detection
 - ✅ Use dynamic values (timestamps, environment variables, etc.)
 
+**Dynamic Values Example:**
+
+```typescript
+// repomix.config.ts
+import { defineConfig } from 'repomix';
+
+// Generate timestamp-based filename
+const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
+
+export default defineConfig({
+  output: {
+    filePath: `output-${timestamp}.xml`,
+    style: 'xml',
+  },
+});
+```
+
 #### JavaScript Configuration
 
 JavaScript configuration files also support dynamic values and type definitions:
@@ -1054,7 +1070,7 @@ import { defineConfig } from 'repomix';
 
 export default defineConfig({
   output: {
-    filePath: `output-${new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-')}.xml`,
+    filePath: 'output.xml',
     style: 'xml',
   },
   ignore: {
@@ -1063,14 +1079,32 @@ export default defineConfig({
 });
 ```
 
+**Dynamic Values with Environment Variables:**
+
+```javascript
+// repomix.config.js
+import { defineConfig } from 'repomix';
+
+const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
+const environment = process.env.NODE_ENV || 'development';
+
+export default defineConfig({
+  output: {
+    filePath: `output-${environment}-${timestamp}.xml`,
+    style: 'xml',
+  },
+});
+```
+
 **CommonJS Example:**
 
 ```javascript
 // repomix.config.cjs
+const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
+
 module.exports = {
   output: {
-    // Use environment variables
-    filePath: process.env.CI ? 'ci-output.xml' : 'local-output.xml',
+    filePath: `output-${timestamp}.xml`,
     style: 'xml',
   },
 };
