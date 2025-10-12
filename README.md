@@ -1070,53 +1070,7 @@ export default defineConfig({
 
 #### JavaScript Configuration
 
-JavaScript configuration files also support dynamic values and type definitions:
-
-```javascript
-// repomix.config.js
-import { defineConfig } from 'repomix';
-
-export default defineConfig({
-  output: {
-    filePath: 'output.xml',
-    style: 'xml',
-  },
-  ignore: {
-    customPatterns: ['**/node_modules/**', '**/dist/**'],
-  },
-});
-```
-
-**Dynamic Values with Environment Variables:**
-
-```javascript
-// repomix.config.js
-import { defineConfig } from 'repomix';
-
-const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
-const environment = process.env.NODE_ENV || 'development';
-
-export default defineConfig({
-  output: {
-    filePath: `output-${environment}-${timestamp}.xml`,
-    style: 'xml',
-  },
-});
-```
-
-**CommonJS Example:**
-
-```javascript
-// repomix.config.cjs
-const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
-
-module.exports = {
-  output: {
-    filePath: `output-${timestamp}.xml`,
-    style: 'xml',
-  },
-};
-```
+JavaScript configuration files work the same as TypeScript, supporting `defineConfig` and dynamic values.
 
 ### Configuration Options
 
