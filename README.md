@@ -1113,6 +1113,24 @@ The configuration file supports [JSON5](https://json5.org/) syntax, which allows
 - Unquoted property names
 - More relaxed string syntax
 
+### Schema Validation
+
+You can enable schema validation for your configuration file by adding the `$schema` property:
+
+```json
+{
+  "$schema": "https://repomix.com/schemas/latest/schema.json",
+  "output": {
+    "filePath": "repomix-output.xml",
+    "style": "xml"
+  }
+}
+```
+
+This provides auto-completion and validation in editors that support JSON schema.
+
+### Example Configuration
+
 Example configuration:
 
 ```json5
