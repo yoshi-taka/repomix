@@ -1015,7 +1015,7 @@ repomix --init
 
 This will create a `repomix.config.json` file with default settings.
 
-#### TypeScript Configuration (Recommended)
+#### TypeScript Configuration
 
 TypeScript configuration files provide the best developer experience with full type checking and IDE support.
 
