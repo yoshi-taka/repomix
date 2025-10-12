@@ -1,6 +1,7 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { createJiti } from 'jiti';
 import JSON5 from 'json5';
 import pc from 'picocolors';
 import { RepomixError, rethrowValidationErrorIfZodError } from '../shared/errorHandle.js';
@@ -17,6 +18,9 @@ import {
 import { getGlobalDirectory } from './globalDirectory.js';
 
 const defaultConfigPaths = [
+  'repomix.config.ts',
+  'repomix.config.mts',
+  'repomix.config.cts',
   'repomix.config.js',
   'repomix.config.mjs',
   'repomix.config.cjs',
@@ -95,10 +99,18 @@ const loadAndValidateConfig = async (filePath: string): Promise<RepomixConfigFil
   try {
     let config: unknown;
 
-    // Check if the file is a JavaScript file
+    // Check file type
+    const isTsFile = filePath.endsWith('.ts') || filePath.endsWith('.mts') || filePath.endsWith('.cts');
     const isJsFile = filePath.endsWith('.js') || filePath.endsWith('.mjs') || filePath.endsWith('.cjs');
 
-    if (isJsFile) {
+    if (isTsFile) {
+      // Use jiti for TypeScript files
+      const jiti = createJiti(import.meta.url, {
+        moduleCache: false, // Disable cache to avoid issues in tests
+        interopDefault: true, // Automatically use default export
+      });
+      config = await jiti.import(pathToFileURL(filePath).href);
+    } else if (isJsFile) {
       // Use dynamic import for JavaScript files
       // Convert absolute path to file:// URL for Windows compatibility
       const fileUrl = pathToFileURL(filePath).href;

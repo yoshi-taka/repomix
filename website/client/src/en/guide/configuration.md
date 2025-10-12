@@ -6,18 +6,18 @@ Repomix can be configured using a configuration file or command-line options. Th
 
 Repomix supports multiple configuration file formats. When searching for a configuration file, Repomix will check in the following priority order:
 
-1. **JavaScript/ES Module** (`repomix.config.js`, `repomix.config.mjs`, `repomix.config.cjs`)
-2. **JSON5** (`repomix.config.json5`)
-3. **JSONC** (`repomix.config.jsonc`)
-4. **JSON** (`repomix.config.json`)
+1. **TypeScript** (`repomix.config.ts`, `repomix.config.mts`, `repomix.config.cts`)
+2. **JavaScript/ES Module** (`repomix.config.js`, `repomix.config.mjs`, `repomix.config.cjs`)
+3. **JSON5** (`repomix.config.json5`)
+4. **JSONC** (`repomix.config.jsonc`)
+5. **JSON** (`repomix.config.json`)
 
-### JavaScript Configuration (Recommended)
+### TypeScript Configuration (Recommended)
 
-JavaScript configuration files provide the most flexibility, allowing you to use dynamic values, environment variables, and TypeScript type definitions for better IDE support.
+TypeScript configuration files provide the best developer experience with full type checking and IDE support:
 
-**ES Module Example:**
-
-```javascript
+```typescript
+// repomix.config.ts
 import { defineConfig } from 'repomix';
 
 export default defineConfig({
@@ -26,6 +26,33 @@ export default defineConfig({
     filePath: `output-${new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-')}.xml`,
     style: 'xml',
     removeComments: true,
+  },
+  ignore: {
+    customPatterns: ['**/node_modules/**', '**/dist/**'],
+  },
+});
+```
+
+**Benefits of TypeScript Configuration:**
+- ✅ Full TypeScript type checking
+- ✅ Excellent IDE autocomplete and IntelliSense
+- ✅ Compile-time error detection
+- ✅ Use dynamic values (timestamps, environment variables, etc.)
+
+### JavaScript Configuration
+
+JavaScript configuration files also provide flexibility with dynamic values and type support:
+
+**ES Module Example:**
+
+```javascript
+// repomix.config.js
+import { defineConfig } from 'repomix';
+
+export default defineConfig({
+  output: {
+    filePath: `output-${new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-')}.xml`,
+    style: 'xml',
   },
   ignore: {
     customPatterns: ['**/node_modules/**', '**/dist/**'],
@@ -48,12 +75,6 @@ module.exports = {
   },
 };
 ```
-
-**Benefits of JavaScript Configuration:**
-- Use dynamic values (timestamps, environment variables, etc.)
-- Full TypeScript type support with `defineConfig`
-- Conditional configuration based on environment
-- More flexible and powerful than static JSON
 
 ### JSON Configuration
 

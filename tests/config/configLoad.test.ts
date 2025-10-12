@@ -58,12 +58,18 @@ describe('configLoad', () => {
       };
       vi.mocked(getGlobalDirectory).mockReturnValue('/global/repomix');
       vi.mocked(fs.stat)
+        .mockRejectedValueOnce(new Error('File not found')) // Local repomix.config.ts
+        .mockRejectedValueOnce(new Error('File not found')) // Local repomix.config.mts
+        .mockRejectedValueOnce(new Error('File not found')) // Local repomix.config.cts
         .mockRejectedValueOnce(new Error('File not found')) // Local repomix.config.js
         .mockRejectedValueOnce(new Error('File not found')) // Local repomix.config.mjs
         .mockRejectedValueOnce(new Error('File not found')) // Local repomix.config.cjs
         .mockRejectedValueOnce(new Error('File not found')) // Local repomix.config.json5
         .mockRejectedValueOnce(new Error('File not found')) // Local repomix.config.jsonc
         .mockRejectedValueOnce(new Error('File not found')) // Local repomix.config.json
+        .mockRejectedValueOnce(new Error('File not found')) // Global repomix.config.ts
+        .mockRejectedValueOnce(new Error('File not found')) // Global repomix.config.mts
+        .mockRejectedValueOnce(new Error('File not found')) // Global repomix.config.cts
         .mockRejectedValueOnce(new Error('File not found')) // Global repomix.config.js
         .mockRejectedValueOnce(new Error('File not found')) // Global repomix.config.mjs
         .mockRejectedValueOnce(new Error('File not found')) // Global repomix.config.cjs
@@ -155,6 +161,9 @@ describe('configLoad', () => {
         ignore: { useDefaultPatterns: true },
       };
       vi.mocked(fs.stat)
+        .mockRejectedValueOnce(new Error('File not found')) // repomix.config.ts
+        .mockRejectedValueOnce(new Error('File not found')) // repomix.config.mts
+        .mockRejectedValueOnce(new Error('File not found')) // repomix.config.cts
         .mockRejectedValueOnce(new Error('File not found')) // repomix.config.js
         .mockRejectedValueOnce(new Error('File not found')) // repomix.config.mjs
         .mockRejectedValueOnce(new Error('File not found')) // repomix.config.cjs
@@ -173,6 +182,9 @@ describe('configLoad', () => {
         ignore: { useDefaultPatterns: true },
       };
       vi.mocked(fs.stat)
+        .mockRejectedValueOnce(new Error('File not found')) // repomix.config.ts
+        .mockRejectedValueOnce(new Error('File not found')) // repomix.config.mts
+        .mockRejectedValueOnce(new Error('File not found')) // repomix.config.cts
         .mockRejectedValueOnce(new Error('File not found')) // repomix.config.js
         .mockRejectedValueOnce(new Error('File not found')) // repomix.config.mjs
         .mockRejectedValueOnce(new Error('File not found')) // repomix.config.cjs
@@ -183,7 +195,7 @@ describe('configLoad', () => {
       expect(result).toEqual(mockConfig);
       expect(fs.readFile).toHaveBeenCalledWith(path.resolve(process.cwd(), 'repomix.config.json5'), 'utf-8');
       // Should not check for .jsonc or .json since .json5 was found
-      expect(fs.stat).toHaveBeenCalledTimes(4);
+      expect(fs.stat).toHaveBeenCalledTimes(7);
     });
 
     test('should throw RepomixError when specific config file does not exist', async () => {

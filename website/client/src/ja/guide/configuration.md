@@ -6,18 +6,18 @@ Repomixは設定ファイルまたはコマンドラインオプションを使�
 
 Repomixは複数の設定ファイル形式をサポートしています。設定ファイルを検索する際、Repomixは以下の優先順位でチェックします：
 
-1. **JavaScript/ES Module** (`repomix.config.js`、`repomix.config.mjs`、`repomix.config.cjs`)
-2. **JSON5** (`repomix.config.json5`)
-3. **JSONC** (`repomix.config.jsonc`)
-4. **JSON** (`repomix.config.json`)
+1. **TypeScript** (`repomix.config.ts`、`repomix.config.mts`、`repomix.config.cts`)
+2. **JavaScript/ES Module** (`repomix.config.js`、`repomix.config.mjs`、`repomix.config.cjs`)
+3. **JSON5** (`repomix.config.json5`)
+4. **JSONC** (`repomix.config.jsonc`)
+5. **JSON** (`repomix.config.json`)
 
-### JavaScript設定（推奨）
+### TypeScript設定（推奨）
 
-JavaScript設定ファイルは最も柔軟性が高く、動的な値、環境変数の使用、TypeScript型定義によるIDEサポートの向上を実現できます。
+TypeScript設定ファイルは、完全な型チェックとIDEサポートにより、最高の開発者体験を提供します：
 
-**ES Moduleの例：**
-
-```javascript
+```typescript
+// repomix.config.ts
 import { defineConfig } from 'repomix';
 
 export default defineConfig({
@@ -26,6 +26,33 @@ export default defineConfig({
     filePath: `output-${new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-')}.xml`,
     style: 'xml',
     removeComments: true,
+  },
+  ignore: {
+    customPatterns: ['**/node_modules/**', '**/dist/**'],
+  },
+});
+```
+
+**TypeScript設定のメリット：**
+- ✅ 完全なTypeScript型チェック
+- ✅ 優れたIDE自動補完とIntelliSense
+- ✅ コンパイル時のエラー検出
+- ✅ 動的な値（タイムスタンプ、環境変数など）の使用が可能
+
+### JavaScript設定
+
+JavaScript設定ファイルも動的な値と型サポートを提供します：
+
+**ES Moduleの例：**
+
+```javascript
+// repomix.config.js
+import { defineConfig } from 'repomix';
+
+export default defineConfig({
+  output: {
+    filePath: `output-${new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-')}.xml`,
+    style: 'xml',
   },
   ignore: {
     customPatterns: ['**/node_modules/**', '**/dist/**'],
@@ -48,12 +75,6 @@ module.exports = {
   },
 };
 ```
-
-**JavaScript設定のメリット：**
-- 動的な値（タイムスタンプ、環境変数など）を使用可能
-- `defineConfig`による完全なTypeScript型サポート
-- 環境に基づいた条件付き設定
-- 静的なJSONよりも柔軟で強力
 
 ### JSON設定
 

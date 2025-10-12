@@ -1001,16 +1001,18 @@ Repomix supports multiple configuration file formats for flexibility and ease of
 
 Repomix will automatically search for configuration files in the following priority order:
 
-1. **JavaScript/ES Module** (`repomix.config.js`, `repomix.config.mjs`, `repomix.config.cjs`)
-2. **JSON5** (`repomix.config.json5`)
-3. **JSONC** (`repomix.config.jsonc`)
-4. **JSON** (`repomix.config.json`)
+1. **TypeScript** (`repomix.config.ts`, `repomix.config.mts`, `repomix.config.cts`)
+2. **JavaScript/ES Module** (`repomix.config.js`, `repomix.config.mjs`, `repomix.config.cjs`)
+3. **JSON5** (`repomix.config.json5`)
+4. **JSONC** (`repomix.config.jsonc`)
+5. **JSON** (`repomix.config.json`)
 
-#### JavaScript Configuration (Recommended)
+#### TypeScript Configuration (Recommended)
 
-JavaScript configuration files allow you to use dynamic values and leverage TypeScript type definitions for better IDE support:
+TypeScript configuration files provide the best developer experience with full type checking and IDE support:
 
-```javascript
+```typescript
+// repomix.config.ts
 import { defineConfig } from 'repomix';
 
 export default defineConfig({
@@ -1019,6 +1021,31 @@ export default defineConfig({
     filePath: `output-${new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-')}.xml`,
     style: 'xml',
     removeComments: true,
+  },
+  ignore: {
+    customPatterns: ['**/node_modules/**', '**/dist/**'],
+  },
+});
+```
+
+**Benefits of TypeScript Configuration:**
+- ✅ Full TypeScript type checking
+- ✅ Excellent IDE autocomplete and IntelliSense
+- ✅ Compile-time error detection
+- ✅ Use dynamic values (timestamps, environment variables, etc.)
+
+#### JavaScript Configuration
+
+JavaScript configuration files also support dynamic values and type definitions:
+
+```javascript
+// repomix.config.js
+import { defineConfig } from 'repomix';
+
+export default defineConfig({
+  output: {
+    filePath: `output-${new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-')}.xml`,
+    style: 'xml',
   },
   ignore: {
     customPatterns: ['**/node_modules/**', '**/dist/**'],
