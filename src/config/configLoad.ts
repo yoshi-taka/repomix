@@ -108,24 +108,17 @@ const loadAndValidateConfig = async (filePath: string): Promise<RepomixConfigFil
     switch (ext) {
       case 'ts':
       case 'mts':
-      case 'cts': {
-        // Use jiti for TypeScript files
-        const jiti = createJiti(import.meta.url, {
-          moduleCache: false, // Disable cache to avoid issues in tests
-          interopDefault: true, // Automatically use default export
-        });
-        config = await jiti.import(pathToFileURL(filePath).href);
-        break;
-      }
-
+      case 'cts':
       case 'js':
       case 'mjs':
       case 'cjs': {
-        // Use dynamic import for JavaScript files
-        // Convert absolute path to file:// URL for Windows compatibility
-        const fileUrl = pathToFileURL(filePath).href;
-        const module = await import(fileUrl);
-        config = module.default || module;
+        // Use jiti for TypeScript and JavaScript files
+        // This provides consistent behavior and avoids Node.js module cache issues
+        const jiti = createJiti(import.meta.url, {
+          moduleCache: false, // Disable cache to ensure fresh config loads
+          interopDefault: true, // Automatically use default export
+        });
+        config = await jiti.import(pathToFileURL(filePath).href);
         break;
       }
 

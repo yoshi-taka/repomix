@@ -33,6 +33,8 @@ Please refer to the README.md file for more detailed information on usage and co
     showLineNumbers: false,
     includeEmptyDirectories: true,
     truncateBase64: true,
+    // Display token count tree for files/directories with 50000+ tokens
+    // Can be boolean (true/false) or number (minimum token threshold)
     tokenCountTree: 50000,
     git: {
       sortByChanges: true,
