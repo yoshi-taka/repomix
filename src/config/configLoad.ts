@@ -95,31 +95,51 @@ export const loadFileConfig = async (rootDir: string, argConfigPath: string | nu
   return {};
 };
 
+const getFileExtension = (filePath: string): string => {
+  const match = filePath.match(/\.(ts|mts|cts|js|mjs|cjs|json5|jsonc|json)$/);
+  return match ? match[1] : '';
+};
+
 const loadAndValidateConfig = async (filePath: string): Promise<RepomixConfigFile> => {
   try {
     let config: unknown;
+    const ext = getFileExtension(filePath);
 
-    // Check file type
-    const isTsFile = filePath.endsWith('.ts') || filePath.endsWith('.mts') || filePath.endsWith('.cts');
-    const isJsFile = filePath.endsWith('.js') || filePath.endsWith('.mjs') || filePath.endsWith('.cjs');
+    switch (ext) {
+      case 'ts':
+      case 'mts':
+      case 'cts': {
+        // Use jiti for TypeScript files
+        const jiti = createJiti(import.meta.url, {
+          moduleCache: false, // Disable cache to avoid issues in tests
+          interopDefault: true, // Automatically use default export
+        });
+        config = await jiti.import(pathToFileURL(filePath).href);
+        break;
+      }
 
-    if (isTsFile) {
-      // Use jiti for TypeScript files
-      const jiti = createJiti(import.meta.url, {
-        moduleCache: false, // Disable cache to avoid issues in tests
-        interopDefault: true, // Automatically use default export
-      });
-      config = await jiti.import(pathToFileURL(filePath).href);
-    } else if (isJsFile) {
-      // Use dynamic import for JavaScript files
-      // Convert absolute path to file:// URL for Windows compatibility
-      const fileUrl = pathToFileURL(filePath).href;
-      const module = await import(fileUrl);
-      config = module.default || module;
-    } else {
-      // Use JSON5 for JSON/JSON5/JSONC files
-      const fileContent = await fs.readFile(filePath, 'utf-8');
-      config = JSON5.parse(fileContent);
+      case 'js':
+      case 'mjs':
+      case 'cjs': {
+        // Use dynamic import for JavaScript files
+        // Convert absolute path to file:// URL for Windows compatibility
+        const fileUrl = pathToFileURL(filePath).href;
+        const module = await import(fileUrl);
+        config = module.default || module;
+        break;
+      }
+
+      case 'json5':
+      case 'jsonc':
+      case 'json': {
+        // Use JSON5 for JSON/JSON5/JSONC files
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        config = JSON5.parse(fileContent);
+        break;
+      }
+
+      default:
+        throw new RepomixError(`Unsupported config file format: ${filePath}`);
     }
 
     return repomixConfigFileSchema.parse(config);
