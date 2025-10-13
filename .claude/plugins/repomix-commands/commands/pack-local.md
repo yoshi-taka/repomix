@@ -20,7 +20,7 @@ Available options:
 - `--include-diffs`: Include git diff output
 - `--include-logs`: Include git commit history
 
-Example usage:
+Examples:
 ```bash
 # Pack current directory
 /pack-local

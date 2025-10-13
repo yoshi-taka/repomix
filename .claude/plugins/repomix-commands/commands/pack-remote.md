@@ -24,7 +24,7 @@ Available options:
 - `--output <path>`: Custom output path
 - `--copy`: Copy output to clipboard
 
-Example usage:
+Examples:
 ```bash
 # Pack GitHub repository
 /pack-remote yamadashy/repomix
