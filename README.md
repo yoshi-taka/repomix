@@ -1020,31 +1020,33 @@ Provides convenient slash commands for quick operations with natural language su
 - `/repomix-commands:pack-remote` - Pack and analyze remote GitHub repositories
 
 **Example usage:**
-```
+```text
 /repomix-commands:pack-local
 Pack this project as markdown with compression
 
 /repomix-commands:pack-remote yamadashy/repomix
-Pack only TypeScript files from the react repository
+Pack only TypeScript files from the yamadashy/repomix repository
 ```
 
 #### Installation
 
 **1. Add the Repomix plugin marketplace:**
 
-```bash
+```text
 /plugin marketplace add yamadashy/repomix
 ```
 
 **2. Install plugins:**
 
-```bash
-# Install commands plugin
-/plugin install repomix-commands@repomix
-
-# Install MCP server plugin
+```text
+# Install MCP server plugin (recommended foundation)
 /plugin install repomix-mcp@repomix
+
+# Install commands plugin (extends functionality)
+/plugin install repomix-commands@repomix
 ```
+
+**Note**: The `repomix-mcp` plugin is recommended as a foundation, and `repomix-commands` extends it with convenient slash commands. While you can install them independently, using both provides the most comprehensive experience.
 
 **Alternatively, use the interactive plugin installer:**
 
