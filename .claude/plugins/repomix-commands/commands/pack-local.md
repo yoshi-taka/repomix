@@ -25,7 +25,7 @@ The user might ask in various ways:
    - Whether to compress (for large codebases)
    - File patterns to include/ignore
    - Additional features (copy to clipboard, include git diffs/logs)
-3. **Execute the command** with: `npx repomix [directory] [options]`
+3. **Execute the command** with: `npx repomix@latest [directory] [options]`
 
 ## Available Options
 
@@ -44,22 +44,22 @@ Based on user intent, you might run:
 
 ```bash
 # "Pack this codebase"
-npx repomix
+npx repomix@latest
 
 # "Pack the src directory"
-npx repomix src/
+npx repomix@latest src/
 
 # "Pack as markdown with compression"
-npx repomix --style markdown --compress
+npx repomix@latest --style markdown --compress
 
 # "Pack only TypeScript and Markdown files"
-npx repomix --include "src/**/*.ts,**/*.md"
+npx repomix@latest --include "src/**/*.ts,**/*.md"
 
 # "Pack and copy to clipboard"
-npx repomix --copy
+npx repomix@latest --copy
 
 # "Pack with git history"
-npx repomix --include-diffs --include-logs
+npx repomix@latest --include-diffs --include-logs
 ```
 
 Remember: Parse the user's natural language request and translate it into the appropriate repomix command.

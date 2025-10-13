@@ -27,7 +27,7 @@ The user might ask in various ways:
    - Whether to compress (for large codebases)
    - File patterns to include/ignore
    - Additional features (copy to clipboard)
-4. **Execute the command** with: `npx repomix --remote <repo> [options]`
+4. **Execute the command** with: `npx repomix@latest --remote <repo> [options]`
 
 ## Supported Repository Formats
 
@@ -51,22 +51,22 @@ Based on user intent, you might run:
 
 ```bash
 # "Pack yamadashy/repomix"
-npx repomix --remote yamadashy/repomix
+npx repomix@latest --remote yamadashy/repomix
 
 # "Analyze facebook/react"
-npx repomix --remote https://github.com/facebook/react
+npx repomix@latest --remote https://github.com/facebook/react
 
 # "Pack the develop branch of user/repo"
-npx repomix --remote https://github.com/user/repo/tree/develop
+npx repomix@latest --remote https://github.com/user/repo/tree/develop
 
 # "Pack microsoft/vscode with compression"
-npx repomix --remote microsoft/vscode --compress
+npx repomix@latest --remote microsoft/vscode --compress
 
 # "Pack only TypeScript files from owner/repo"
-npx repomix --remote owner/repo --include "src/**/*.ts"
+npx repomix@latest --remote owner/repo --include "src/**/*.ts"
 
 # "Pack yamadashy/repomix as markdown and copy to clipboard"
-npx repomix --remote yamadashy/repomix --copy --style markdown
+npx repomix@latest --remote yamadashy/repomix --copy --style markdown
 ```
 
 Remember: Parse the user's natural language request and translate it into the appropriate repomix command with the --remote option.
