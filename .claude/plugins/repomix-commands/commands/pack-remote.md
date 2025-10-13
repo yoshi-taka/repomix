@@ -1,22 +1,43 @@
 ---
 description: Pack and analyze a remote GitHub repository
-argument-hint: <repo-url-or-owner/repo> [options]
 ---
 
 Fetch and analyze a GitHub repository using Repomix.
 
-This command will:
-1. Clone the remote repository
-2. Package it into an AI-friendly format
-3. Provide analysis-ready output with file statistics and token count
+When the user asks to pack a remote repository, analyze their request and run the appropriate repomix command.
 
-Supported repository formats:
+## User Intent Examples
+
+The user might ask in various ways:
+- "Pack the yamadashy/repomix repository"
+- "Analyze facebook/react from GitHub"
+- "Pack https://github.com/microsoft/vscode"
+- "Pack react repository with compression"
+- "Pack only TypeScript files from the Next.js repo"
+- "Analyze the main branch of user/repo"
+
+## Your Responsibilities
+
+1. **Understand the user's intent** from natural language
+2. **Extract the repository information**:
+   - Repository URL or owner/repo format
+   - Specific branch, tag, or commit (if mentioned)
+3. **Determine the appropriate options**:
+   - Output format: xml (default), markdown, json, or plain
+   - Whether to compress (for large codebases)
+   - File patterns to include/ignore
+   - Additional features (copy to clipboard)
+4. **Execute the command** with: `npx repomix --remote <repo> [options]`
+
+## Supported Repository Formats
+
 - `owner/repo` (e.g., yamadashy/repomix)
 - `https://github.com/owner/repo`
 - `https://github.com/owner/repo/tree/branch-name`
 - `https://github.com/owner/repo/commit/hash`
 
-Available options:
+## Available Options
+
 - `--style <format>`: Output format (xml, markdown, json, plain)
 - `--include <patterns>`: Include only matching patterns (e.g., "src/**/*.ts,**/*.md")
 - `--ignore <patterns>`: Additional ignore patterns
@@ -24,25 +45,28 @@ Available options:
 - `--output <path>`: Custom output path
 - `--copy`: Copy output to clipboard
 
-Examples:
+## Command Examples
+
+Based on user intent, you might run:
+
 ```bash
-# Pack GitHub repository
-/pack-remote yamadashy/repomix
+# "Pack yamadashy/repomix"
+npx repomix --remote yamadashy/repomix
 
-# Pack with full URL
-/pack-remote https://github.com/facebook/react
+# "Analyze facebook/react"
+npx repomix --remote https://github.com/facebook/react
 
-# Pack specific branch
-/pack-remote https://github.com/user/repo/tree/develop
+# "Pack the develop branch of user/repo"
+npx repomix --remote https://github.com/user/repo/tree/develop
 
-# Pack with compression
-/pack-remote microsoft/vscode --compress
+# "Pack microsoft/vscode with compression"
+npx repomix --remote microsoft/vscode --compress
 
-# Pack TypeScript files only
-/pack-remote owner/repo --include "src/**/*.ts"
+# "Pack only TypeScript files from owner/repo"
+npx repomix --remote owner/repo --include "src/**/*.ts"
 
-# Pack and copy to clipboard
-/pack-remote yamadashy/repomix --copy --style markdown
+# "Pack yamadashy/repomix as markdown and copy to clipboard"
+npx repomix --remote yamadashy/repomix --copy --style markdown
 ```
 
-Run: npx repomix --remote $1 ${@:2}
+Remember: Parse the user's natural language request and translate it into the appropriate repomix command with the --remote option.

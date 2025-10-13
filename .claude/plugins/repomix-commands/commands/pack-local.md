@@ -1,16 +1,34 @@
 ---
 description: Pack local codebase with Repomix
-argument-hint: [directory] [options]
 ---
 
 Pack a local codebase using Repomix with AI-optimized format.
 
-This command will:
-1. Package the specified directory (or current directory) into a single AI-friendly file
-2. Show file statistics and token count
-3. Output to repomix-output.xml by default
+When the user asks to pack a local codebase, analyze their request and run the appropriate repomix command.
 
-Available options:
+## User Intent Examples
+
+The user might ask in various ways:
+- "Pack this codebase"
+- "Pack the src directory"
+- "Pack this project as markdown"
+- "Pack TypeScript files only"
+- "Pack with compression and copy to clipboard"
+- "Pack this project including git history"
+
+## Your Responsibilities
+
+1. **Understand the user's intent** from natural language
+2. **Determine the appropriate options**:
+   - Which directory to pack (default: current directory)
+   - Output format: xml (default), markdown, json, or plain
+   - Whether to compress (for large codebases)
+   - File patterns to include/ignore
+   - Additional features (copy to clipboard, include git diffs/logs)
+3. **Execute the command** with: `npx repomix [directory] [options]`
+
+## Available Options
+
 - `--style <format>`: Output format (xml, markdown, json, plain)
 - `--include <patterns>`: Include only matching patterns (e.g., "src/**/*.ts,**/*.md")
 - `--ignore <patterns>`: Additional ignore patterns
@@ -20,22 +38,28 @@ Available options:
 - `--include-diffs`: Include git diff output
 - `--include-logs`: Include git commit history
 
-Examples:
+## Command Examples
+
+Based on user intent, you might run:
+
 ```bash
-# Pack current directory
-/pack-local
+# "Pack this codebase"
+npx repomix
 
-# Pack specific directory
-/pack-local src/
+# "Pack the src directory"
+npx repomix src/
 
-# Pack with options
-/pack-local --style markdown --compress
+# "Pack as markdown with compression"
+npx repomix --style markdown --compress
 
-# Pack TypeScript files only
-/pack-local --include "src/**/*.ts,**/*.md"
+# "Pack only TypeScript and Markdown files"
+npx repomix --include "src/**/*.ts,**/*.md"
 
-# Pack and copy to clipboard
-/pack-local --copy
+# "Pack and copy to clipboard"
+npx repomix --copy
+
+# "Pack with git history"
+npx repomix --include-diffs --include-logs
 ```
 
-Run: npx repomix $ARGUMENTS
+Remember: Parse the user's natural language request and translate it into the appropriate repomix command.
