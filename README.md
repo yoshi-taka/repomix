@@ -958,23 +958,29 @@ User: "Pack only TypeScript files from the react repository"
 
 #### Installation
 
-The plugins are included in the Repomix repository. To use them in Claude Code:
+**1. Add the Repomix plugin marketplace:**
 
-1. Clone or download the Repomix repository
-2. The plugins are located in `.claude/plugins/` directory
-3. Add the marketplace to Claude Code:
-   ```bash
-   claude plugin install /path/to/repomix/.claude-plugin/marketplace.json
-   ```
-
-Or install plugins individually:
 ```bash
-# Install MCP server plugin
-claude plugin install /path/to/repomix/.claude/plugins/repomix-mcp
-
-# Install commands plugin
-claude plugin install /path/to/repomix/.claude/plugins/repomix-commands
+/plugin marketplace add yamadashy/repomix
 ```
+
+**2. Install plugins:**
+
+```bash
+# Install commands plugin
+/plugin install repomix-commands@repomix
+
+# Install MCP server plugin
+/plugin install repomix-mcp@repomix
+```
+
+**Alternatively, use the interactive plugin installer:**
+
+```bash
+/plugin
+```
+
+This will open an interactive interface where you can browse and install available plugins.
 
 #### Benefits
 
