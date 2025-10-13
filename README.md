@@ -923,75 +923,6 @@ You can use Docker as an alternative to npx for running Repomix as an MCP server
 
 Once configured, your AI assistant can directly use Repomix's capabilities to analyze codebases without manual file preparation, making code analysis workflows more efficient.
 
-### Claude Code Plugins
-
-Repomix provides official plugins for [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) that integrate seamlessly with the AI-powered development environment.
-
-#### Available Plugins
-
-**1. repomix-mcp** (MCP Server Plugin)
-
-Foundation plugin that provides AI-powered codebase analysis through MCP server integration.
-
-**Features:**
-- Pack local and remote repositories
-- Search through packed outputs
-- Read files with built-in security scanning (Secretlint)
-- Automatic Tree-sitter compression (~70% token reduction)
-
-**2. repomix-commands** (Slash Commands Plugin)
-
-Provides convenient slash commands for quick operations with natural language support.
-
-**Available Commands:**
-- `/repomix-commands:pack-local` - Pack local codebase with various options
-- `/repomix-commands:pack-remote` - Pack and analyze remote GitHub repositories
-
-**Example usage:**
-```
-/repomix-commands:pack-local
-Pack this project as markdown with compression
-
-/repomix-commands:pack-remote yamadashy/repomix
-Pack only TypeScript files from the react repository
-```
-
-#### Installation
-
-**1. Add the Repomix plugin marketplace:**
-
-```bash
-/plugin marketplace add yamadashy/repomix
-```
-
-**2. Install plugins:**
-
-```bash
-# Install commands plugin
-/plugin install repomix-commands@repomix
-
-# Install MCP server plugin
-/plugin install repomix-mcp@repomix
-```
-
-**Alternatively, use the interactive plugin installer:**
-
-```bash
-/plugin
-```
-
-This will open an interactive interface where you can browse and install available plugins.
-
-#### Benefits
-
-- **Seamless Integration**: Claude can directly analyze codebases without manual preparation
-- **Natural Language**: Use conversational commands instead of remembering CLI syntax
-- **Always Latest**: Automatically uses `npx repomix@latest` for up-to-date features
-- **Security Built-in**: Automatic Secretlint scanning prevents sensitive data exposure
-- **Token Optimization**: Tree-sitter compression for large codebases
-
-For more details, see the plugin documentation in the `.claude/plugins/` directory.
-
 #### Available MCP Tools
 
 When running as an MCP server, Repomix provides the following tools:
@@ -1063,6 +994,75 @@ When running as an MCP server, Repomix provides the following tools:
     - Provides safe directory traversal with proper error handling
     - Validates paths and ensures they are absolute
     - Useful for exploring project structure and understanding codebase organization
+
+### Claude Code Plugins
+
+Repomix provides official plugins for [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) that integrate seamlessly with the AI-powered development environment.
+
+#### Available Plugins
+
+**1. repomix-mcp** (MCP Server Plugin)
+
+Foundation plugin that provides AI-powered codebase analysis through MCP server integration.
+
+**Features:**
+- Pack local and remote repositories
+- Search through packed outputs
+- Read files with built-in security scanning (Secretlint)
+- Automatic Tree-sitter compression (~70% token reduction)
+
+**2. repomix-commands** (Slash Commands Plugin)
+
+Provides convenient slash commands for quick operations with natural language support.
+
+**Available Commands:**
+- `/repomix-commands:pack-local` - Pack local codebase with various options
+- `/repomix-commands:pack-remote` - Pack and analyze remote GitHub repositories
+
+**Example usage:**
+```
+/repomix-commands:pack-local
+Pack this project as markdown with compression
+
+/repomix-commands:pack-remote yamadashy/repomix
+Pack only TypeScript files from the react repository
+```
+
+#### Installation
+
+**1. Add the Repomix plugin marketplace:**
+
+```bash
+/plugin marketplace add yamadashy/repomix
+```
+
+**2. Install plugins:**
+
+```bash
+# Install commands plugin
+/plugin install repomix-commands@repomix
+
+# Install MCP server plugin
+/plugin install repomix-mcp@repomix
+```
+
+**Alternatively, use the interactive plugin installer:**
+
+```bash
+/plugin
+```
+
+This will open an interactive interface where you can browse and install available plugins.
+
+#### Benefits
+
+- **Seamless Integration**: Claude can directly analyze codebases without manual preparation
+- **Natural Language**: Use conversational commands instead of remembering CLI syntax
+- **Always Latest**: Automatically uses `npx repomix@latest` for up-to-date features
+- **Security Built-in**: Automatic Secretlint scanning prevents sensitive data exposure
+- **Token Optimization**: Tree-sitter compression for large codebases
+
+For more details, see the plugin documentation in the `.claude/plugins/` directory.
 
 ## ⚙️ Configuration
 
