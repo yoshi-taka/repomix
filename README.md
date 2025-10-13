@@ -944,16 +944,16 @@ Foundation plugin that provides AI-powered codebase analysis through MCP server 
 Provides convenient slash commands for quick operations with natural language support.
 
 **Available Commands:**
-- `/pack-local` - Pack local codebase with various options
-- `/pack-remote` - Pack and analyze remote GitHub repositories
+- `/repomix-commands:pack-local` - Pack local codebase with various options
+- `/repomix-commands:pack-remote` - Pack and analyze remote GitHub repositories
 
 **Example usage:**
 ```
-User: /pack-local
-User: "Pack this project as markdown with compression"
+/repomix-commands:pack-local
+Pack this project as markdown with compression
 
-User: /pack-remote yamadashy/repomix
-User: "Pack only TypeScript files from the react repository"
+/repomix-commands:pack-remote yamadashy/repomix
+Pack only TypeScript files from the react repository
 ```
 
 #### Installation
