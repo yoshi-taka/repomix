@@ -62,4 +62,10 @@ npx repomix@latest --copy
 npx repomix@latest --include-diffs --include-logs
 ```
 
+## Help and Documentation
+
+If you need more information about available options or encounter any issues:
+- Run `npx repomix@latest -h` or `npx repomix@latest --help` to see all available options
+- Check the official documentation at https://github.com/yamadashy/repomix
+
 Remember: Parse the user's natural language request and translate it into the appropriate repomix command.
