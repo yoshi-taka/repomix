@@ -82,4 +82,56 @@ describe('parseFile for Dart', () => {
       expect(result).toContain(expectContent);
     }
   });
+
+  test('should parse Dart with enum, extension, and constructor', async () => {
+    const fileContent = `
+      /// Status enum
+      enum Status {
+        pending,
+        active,
+        completed
+      }
+
+      /// String extension
+      extension StringExtension on String {
+        /// Capitalizes first letter
+        String capitalize() {
+          return this[0].toUpperCase() + substring(1);
+        }
+      }
+
+      /// User class
+      class User {
+        final String name;
+        final Status status;
+
+        /// User constructor
+        User(this.name, this.status);
+
+        /// Named constructor
+        User.guest() : name = 'Guest', status = Status.pending;
+      }
+    `;
+    const filePath = 'dummy.dart';
+    const config = {};
+    const result = await parseFile(fileContent, filePath, createMockConfig(config));
+    expect(typeof result).toBe('string');
+
+    const expectContents = [
+      '/// Status enum',
+      'enum Status {',
+      '/// String extension',
+      'extension StringExtension on String {',
+      '/// Capitalizes first letter',
+      'String capitalize() {',
+      '/// User class',
+      'class User {',
+      '/// User constructor',
+      '/// Named constructor',
+    ];
+
+    for (const expectContent of expectContents) {
+      expect(result).toContain(expectContent);
+    }
+  });
 });
