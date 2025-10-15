@@ -4,7 +4,7 @@ import { XMLBuilder } from 'fast-xml-parser';
 import Handlebars from 'handlebars';
 import type { RepomixConfigMerged } from '../../config/configSchema.js';
 import { RepomixError } from '../../shared/errorHandle.js';
-import { type FileSearchResult, searchFiles } from '../file/fileSearch.js';
+import { type FileSearchResult, listDirectories, searchFiles } from '../file/fileSearch.js';
 import { generateTreeString } from '../file/fileTreeGenerate.js';
 import type { ProcessedFile } from '../file/fileTypes.js';
 import type { GitDiffResult } from '../git/gitDiffHandle.js';
@@ -268,6 +268,10 @@ export const buildOutputGeneratorContext = async (
   processedFiles: ProcessedFile[],
   gitDiffResult: GitDiffResult | undefined = undefined,
   gitLogResult: GitLogResult | undefined = undefined,
+  deps = {
+    listDirectories,
+    searchFiles,
+  },
 ): Promise<OutputGeneratorContext> => {
   let repositoryInstruction = '';
 
@@ -280,10 +284,25 @@ export const buildOutputGeneratorContext = async (
     }
   }
 
+  // Determine if full-tree mode applies
+  const shouldUseFullTree = !!config.output.includeFullDirectoryStructure && (config.include?.length ?? 0) > 0;
+
   let emptyDirPaths: string[] = [];
-  if (config.output.includeEmptyDirectories) {
+  if (shouldUseFullTree) {
+    // Full tree mode: collect all directories from all roots
     try {
-      emptyDirPaths = (await Promise.all(rootDirs.map((rootDir) => searchFiles(rootDir, config)))).reduce(
+      const allDirectories = await Promise.all(rootDirs.map((rootDir) => deps.listDirectories(rootDir, config)));
+      // Merge and deduplicate directory lists
+      emptyDirPaths = Array.from(new Set(allDirectories.flat()));
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new RepomixError(`Failed to list directories: ${error.message}`);
+      }
+    }
+  } else if (config.output.includeEmptyDirectories) {
+    // Default behavior: include empty directories only
+    try {
+      emptyDirPaths = (await Promise.all(rootDirs.map((rootDir) => deps.searchFiles(rootDir, config)))).reduce(
         (acc: FileSearchResult, curr: FileSearchResult) =>
           ({
             filePaths: [...acc.filePaths, ...curr.filePaths],
