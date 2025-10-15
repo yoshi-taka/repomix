@@ -77,4 +77,34 @@ describe('includeFullDirectoryStructure flag', () => {
     // Should still include the file name within the tree
     expect(ctx.treeString).toContain('index.ts');
   });
+
+  test('does not render full tree when include is empty even if flag is enabled', async () => {
+    const config = createMockConfig({ include: [] });
+    const processedFiles: ProcessedFile[] = [
+      { path: 'src/a/index.ts', content: 'export const a = 1;\n' },
+    ];
+    const allFilePaths = processedFiles.map((f) => f.path);
+
+    const deps = {
+      // Would return extra directories if called, but should NOT be used in this case
+      listDirectories: async () => ['src', 'src/a', 'docs', 'docs/guide'],
+      searchFiles: async () => ({ filePaths: allFilePaths, emptyDirPaths: [] }),
+    };
+
+    const ctx = await buildOutputGeneratorContext(
+      ['/repo'],
+      config,
+      allFilePaths,
+      processedFiles,
+      undefined,
+      undefined,
+      deps,
+    );
+
+    // Should not include directories outside of file-derived tree ('docs' should not appear)
+    expect(ctx.treeString).not.toContain('docs');
+    // Should include the file-derived structure
+    expect(ctx.treeString).toContain('src');
+    expect(ctx.treeString).toContain('index.ts');
+  });
 });
