@@ -284,25 +284,30 @@ export const buildOutputGeneratorContext = async (
     }
   }
 
-  // Determine if full-tree mode applies
-  const shouldUseFullTree = !!config.output.includeFullDirectoryStructure && (config.include?.length ?? 0) > 0;
+  // Determine if full-tree mode applies (only when directory structure is rendered)
+  const shouldUseFullTree =
+    config.output.directoryStructure === true &&
+    !!config.output.includeFullDirectoryStructure &&
+    (config.include?.length ?? 0) > 0;
 
-  let emptyDirPaths: string[] = [];
+  // Paths to include in the directory tree visualization
+  let directoryPathsForTree: string[] = [];
   if (shouldUseFullTree) {
     // Full tree mode: collect all directories from all roots
     try {
       const allDirectories = await Promise.all(rootDirs.map((rootDir) => deps.listDirectories(rootDir, config)));
-      // Merge and deduplicate directory lists
-      emptyDirPaths = Array.from(new Set(allDirectories.flat()));
+      // Merge, deduplicate, and sort for deterministic output
+      directoryPathsForTree = Array.from(new Set(allDirectories.flat())).sort();
     } catch (error) {
-      if (error instanceof Error) {
-        throw new RepomixError(`Failed to list directories: ${error.message}`);
-      }
+      throw new RepomixError(
+        `Failed to list directories: ${error instanceof Error ? error.message : String(error)}`,
+        error instanceof Error ? { cause: error } : undefined,
+      );
     }
-  } else if (config.output.includeEmptyDirectories) {
+  } else if (config.output.directoryStructure && config.output.includeEmptyDirectories) {
     // Default behavior: include empty directories only
     try {
-      emptyDirPaths = (await Promise.all(rootDirs.map((rootDir) => deps.searchFiles(rootDir, config)))).reduce(
+      const merged = (await Promise.all(rootDirs.map((rootDir) => deps.searchFiles(rootDir, config)))).reduce(
         (acc: FileSearchResult, curr: FileSearchResult) =>
           ({
             filePaths: [...acc.filePaths, ...curr.filePaths],
@@ -310,16 +315,18 @@ export const buildOutputGeneratorContext = async (
           }) as FileSearchResult,
         { filePaths: [], emptyDirPaths: [] },
       ).emptyDirPaths;
+      directoryPathsForTree = [...new Set(merged)].sort();
     } catch (error) {
-      if (error instanceof Error) {
-        throw new RepomixError(`Failed to search for empty directories: ${error.message}`);
-      }
+      throw new RepomixError(
+        `Failed to search for empty directories: ${error instanceof Error ? error.message : String(error)}`,
+        error instanceof Error ? { cause: error } : undefined,
+      );
     }
   }
 
   return {
     generationDate: new Date().toISOString(),
-    treeString: generateTreeString(allFilePaths, emptyDirPaths),
+    treeString: generateTreeString(allFilePaths, directoryPathsForTree),
     processedFiles,
     config,
     instruction: repositoryInstruction,
