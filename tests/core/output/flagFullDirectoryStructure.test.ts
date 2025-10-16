@@ -80,9 +80,7 @@ describe('includeFullDirectoryStructure flag', () => {
 
   test('does not render full tree when include is empty even if flag is enabled', async () => {
     const config = createMockConfig({ include: [] });
-    const processedFiles: ProcessedFile[] = [
-      { path: 'src/a/index.ts', content: 'export const a = 1;\n' },
-    ];
+    const processedFiles: ProcessedFile[] = [{ path: 'src/a/index.ts', content: 'export const a = 1;\n' }];
     const allFilePaths = processedFiles.map((f) => f.path);
 
     const deps = {
