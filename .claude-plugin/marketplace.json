@@ -32,8 +32,7 @@
       "keywords": ["repomix", "commands", "pack", "productivity"],
       "category": "productivity",
       "license": "MIT",
-      "strict": false,
-      "requires": ["repomix-mcp"]
+      "strict": false
     }
   ]
 }
