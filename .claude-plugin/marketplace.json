@@ -12,7 +12,7 @@
       "name": "repomix-mcp",
       "source": "./.claude/plugins/repomix-mcp",
       "description": "Repomix MCP server for AI-powered codebase analysis. Pack local/remote repositories, search outputs, and read files with built-in security scanning. Foundation plugin that enables all Repomix features in Claude Code.",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": {
         "name": "yamadashy"
       },
@@ -25,7 +25,7 @@
       "name": "repomix-commands",
       "source": "./.claude/plugins/repomix-commands",
       "description": "Slash commands for quick Repomix operations. Pack local and remote repositories with simple commands like /pack-local and /pack-remote.",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": {
         "name": "yamadashy"
       },
