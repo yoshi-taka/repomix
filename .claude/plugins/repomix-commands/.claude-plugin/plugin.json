@@ -6,7 +6,5 @@
     "name": "yamadashy"
   },
   "keywords": ["repomix", "commands", "pack", "productivity"],
-  "category": "productivity",
-  "license": "MIT",
-  "requires": ["repomix-mcp"]
+  "license": "MIT"
 }
