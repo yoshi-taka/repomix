@@ -4,7 +4,7 @@ import { XMLBuilder } from 'fast-xml-parser';
 import Handlebars from 'handlebars';
 import type { RepomixConfigMerged } from '../../config/configSchema.js';
 import { RepomixError } from '../../shared/errorHandle.js';
-import { type FileSearchResult, listDirectories, searchFiles } from '../file/fileSearch.js';
+import { type FileSearchResult, listDirectories, listFiles, searchFiles } from '../file/fileSearch.js';
 import { generateTreeString } from '../file/fileTreeGenerate.js';
 import type { ProcessedFile } from '../file/fileTypes.js';
 import type { GitDiffResult } from '../git/gitDiffHandle.js';
@@ -270,6 +270,7 @@ export const buildOutputGeneratorContext = async (
   gitLogResult: GitLogResult | undefined = undefined,
   deps = {
     listDirectories,
+    listFiles,
     searchFiles,
   },
 ): Promise<OutputGeneratorContext> => {
@@ -292,15 +293,29 @@ export const buildOutputGeneratorContext = async (
 
   // Paths to include in the directory tree visualization
   let directoryPathsForTree: string[] = [];
+  let filePathsForTree: string[] = allFilePaths;
+
   if (shouldUseFullTree) {
-    // Full tree mode: collect all directories from all roots
     try {
-      const allDirectories = await Promise.all(rootDirs.map((rootDir) => deps.listDirectories(rootDir, config)));
+      // Collect all directories and all files from all roots
+      const [allDirectoriesByRoot, allFilesByRoot] = await Promise.all([
+        Promise.all(rootDirs.map((rootDir) => deps.listDirectories(rootDir, config))),
+        Promise.all(rootDirs.map((rootDir) => deps.listFiles(rootDir, config))),
+      ]);
+
       // Merge, deduplicate, and sort for deterministic output
-      directoryPathsForTree = Array.from(new Set(allDirectories.flat())).sort();
+      const allDirectories = Array.from(new Set(allDirectoriesByRoot.flat())).sort();
+      const allRepoFiles = Array.from(new Set(allFilesByRoot.flat()));
+
+      // Merge in any files that weren't part of the included files so they appear in the tree
+      const includedSet = new Set(allFilePaths);
+      const additionalFiles = allRepoFiles.filter((p) => !includedSet.has(p));
+
+      directoryPathsForTree = allDirectories;
+      filePathsForTree = Array.from(new Set([...allFilePaths, ...additionalFiles]));
     } catch (error) {
       throw new RepomixError(
-        `Failed to list directories: ${error instanceof Error ? error.message : String(error)}`,
+        `Failed to build full directory structure: ${error instanceof Error ? error.message : String(error)}`,
         error instanceof Error ? { cause: error } : undefined,
       );
     }
@@ -326,7 +341,7 @@ export const buildOutputGeneratorContext = async (
 
   return {
     generationDate: new Date().toISOString(),
-    treeString: generateTreeString(allFilePaths, directoryPathsForTree),
+    treeString: generateTreeString(filePathsForTree, directoryPathsForTree),
     processedFiles,
     config,
     instruction: repositoryInstruction,

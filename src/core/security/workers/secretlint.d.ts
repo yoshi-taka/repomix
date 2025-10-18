@@ -1,5 +1,6 @@
 declare module '@secretlint/secretlint-rule-preset-recommend' {
-  // Using any here avoids importing Secretlint types into ambient module context
-  // and matches the runtime shape expected by securityCheckWorker.
-  export const creator: any;
+  import type { SecretLintRulePresetCreator } from '@secretlint/types';
+
+  // Re-export as a preset creator without importing runtime Secretlint modules.
+  export const creator: SecretLintRulePresetCreator;
 }

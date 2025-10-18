@@ -49,7 +49,7 @@ const createMockConfig = (overrides: Partial<RepomixConfigMerged> = {}): Repomix
 });
 
 describe('includeFullDirectoryStructure flag', () => {
-  test('renders full repository tree when flag is enabled and include patterns present', async () => {
+  test('renders full repository tree including root-level files when flag is enabled and include patterns present', async () => {
     const config = createMockConfig();
     const processedFiles: ProcessedFile[] = [{ path: 'src/a/index.ts', content: 'export const a = 1;\n' }];
     const allFilePaths = processedFiles.map((f) => f.path);
@@ -57,6 +57,8 @@ describe('includeFullDirectoryStructure flag', () => {
     const deps = {
       // Return a directory set that includes paths outside of the included files
       listDirectories: async () => ['src', 'src/a', 'src/b', 'docs', 'docs/guide'],
+      // Files across the repo (subject to ignores)
+      listFiles: async () => ['README.md', 'LICENSE.md', 'src/a/index.ts', 'src/b/other.ts', 'docs/guide/intro.md'],
       // Not used in full-tree branch, but included for completeness
       searchFiles: async () => ({ filePaths: allFilePaths, emptyDirPaths: [] }),
     };
@@ -71,7 +73,10 @@ describe('includeFullDirectoryStructure flag', () => {
       deps,
     );
 
-    // Expect the tree to include directories beyond those derived from files
+    // Expect the tree to include root-level files beyond those derived from included files
+    expect(ctx.treeString).toContain('README.md');
+    expect(ctx.treeString).toContain('LICENSE.md');
+    // Expect directories beyond those derived from files
     expect(ctx.treeString).toContain('docs');
     expect(ctx.treeString).toContain('src');
     // Should still include the file name within the tree
@@ -86,6 +91,7 @@ describe('includeFullDirectoryStructure flag', () => {
     const deps = {
       // Would return extra directories if called, but should NOT be used in this case
       listDirectories: async () => ['src', 'src/a', 'docs', 'docs/guide'],
+      listFiles: async () => ['README.md', 'LICENSE.md'],
       searchFiles: async () => ({ filePaths: allFilePaths, emptyDirPaths: [] }),
     };
 
@@ -99,8 +105,10 @@ describe('includeFullDirectoryStructure flag', () => {
       deps,
     );
 
-    // Should not include directories outside of file-derived tree ('docs' should not appear)
+    // Should not include directories/files outside of file-derived tree ('docs' and root files should not appear)
     expect(ctx.treeString).not.toContain('docs');
+    expect(ctx.treeString).not.toContain('README.md');
+    expect(ctx.treeString).not.toContain('LICENSE.md');
     // Should include the file-derived structure
     expect(ctx.treeString).toContain('src');
     expect(ctx.treeString).toContain('index.ts');
