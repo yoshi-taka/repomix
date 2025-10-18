@@ -20,6 +20,49 @@ Use [glob patterns](https://github.com/mrmlnc/fast-glob?tab=readme-ov-file#patte
 repomix --include "src/**/*.ts,**/*.md"
 ```
 
+### Include Full Directory Structure with Specific Files
+
+When using `--include` patterns, you can also display the complete directory tree structure while still only processing the selected files:
+
+```bash
+repomix --include "cli/**/*.go" --include-full-directory-structure
+```
+
+This flag provides the full repository context by showing all directories and files (respecting ignore patterns) in the directory structure section, while still processing only the files that match the include patterns.
+
+**Benefits:**
+- **Full project context**: See the entire directory structure, including files outside include patterns
+- **Focused processing**: File contents and metrics still reflect only included files
+- **Better AI understanding**: Provides complete repository layout for better context
+
+**Example:**
+
+Without the flag:
+```
+<directory_structure>
+cli/
+  go.mod
+  main.go
+  README.md
+</directory_structure>
+```
+
+With `--include-full-directory-structure`:
+```
+<directory_structure>
+README.md
+LICENSE.md
+cli/
+  go.mod
+  main.go
+  README.md
+docs/
+  guide.md
+</directory_structure>
+```
+
+**Note:** This flag only affects the directory structure visualization. File processing, content, and metrics remain scoped to your include patterns.
+
 ### Exclude Files
 ```bash
 repomix --ignore "**/*.log,tmp/"

@@ -20,6 +20,49 @@ Verwenden Sie [Glob-Muster](https://github.com/mrmlnc/fast-glob?tab=readme-ov-fi
 repomix --include "src/**/*.ts,**/*.md"
 ```
 
+### Vollständige Verzeichnisstruktur mit spezifischen Dateien einschließen
+
+Bei Verwendung von `--include`-Mustern können Sie auch die vollständige Verzeichnisbaumstruktur anzeigen lassen, während Sie nur die ausgewählten Dateien verarbeiten:
+
+```bash
+repomix --include "cli/**/*.go" --include-full-directory-structure
+```
+
+Dieses Flag bietet den vollständigen Repository-Kontext, indem es alle Verzeichnisse und Dateien (unter Beachtung der Ignore-Muster) im Verzeichnisstrukturabschnitt anzeigt, während nur die Dateien verarbeitet werden, die den Include-Mustern entsprechen.
+
+**Vorteile:**
+- **Vollständiger Projektkontext**: Sehen Sie die gesamte Verzeichnisstruktur, einschließlich Dateien außerhalb der Include-Muster
+- **Fokussierte Verarbeitung**: Dateiinhalte und Metriken spiegeln weiterhin nur die eingeschlossenen Dateien wider
+- **Besseres AI-Verständnis**: Bietet vollständiges Repository-Layout für besseren Kontext
+
+**Beispiel:**
+
+Ohne das Flag:
+```
+<directory_structure>
+cli/
+  go.mod
+  main.go
+  README.md
+</directory_structure>
+```
+
+Mit `--include-full-directory-structure`:
+```
+<directory_structure>
+README.md
+LICENSE.md
+cli/
+  go.mod
+  main.go
+  README.md
+docs/
+  guide.md
+</directory_structure>
+```
+
+**Hinweis:** Dieses Flag betrifft nur die Visualisierung der Verzeichnisstruktur. Dateiverarbeitung, Inhalte und Metriken bleiben auf Ihre Include-Muster beschränkt.
+
 ### Dateien ausschließen
 ```bash
 repomix --ignore "**/*.log,tmp/"

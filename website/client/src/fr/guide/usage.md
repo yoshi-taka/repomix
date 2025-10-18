@@ -24,6 +24,49 @@ Utilisez des [motifs glob](https://github.com/mrmlnc/fast-glob?tab=readme-ov-fil
 repomix --include "src/**/*.ts,**/*.md"
 ```
 
+### Inclure la structure de répertoire complète avec des fichiers spécifiques
+
+Lors de l'utilisation de motifs `--include`, vous pouvez également afficher la structure d'arborescence complète des répertoires tout en ne traitant que les fichiers sélectionnés :
+
+```bash
+repomix --include "cli/**/*.go" --include-full-directory-structure
+```
+
+Ce drapeau fournit le contexte complet du dépôt en affichant tous les répertoires et fichiers (en respectant les motifs d'exclusion) dans la section structure de répertoire, tout en ne traitant que les fichiers correspondant aux motifs d'inclusion.
+
+**Avantages :**
+- **Contexte complet du projet** : Voir l'intégralité de la structure de répertoire, y compris les fichiers en dehors des motifs d'inclusion
+- **Traitement ciblé** : Le contenu des fichiers et les métriques reflètent toujours uniquement les fichiers inclus
+- **Meilleure compréhension de l'IA** : Fournit une disposition complète du dépôt pour un meilleur contexte
+
+**Exemple :**
+
+Sans le drapeau :
+```
+<directory_structure>
+cli/
+  go.mod
+  main.go
+  README.md
+</directory_structure>
+```
+
+Avec `--include-full-directory-structure` :
+```
+<directory_structure>
+README.md
+LICENSE.md
+cli/
+  go.mod
+  main.go
+  README.md
+docs/
+  guide.md
+</directory_structure>
+```
+
+**Remarque :** Ce drapeau n'affecte que la visualisation de la structure de répertoire. Le traitement des fichiers, le contenu et les métriques restent limités à vos motifs d'inclusion.
+
 ### Exclure des fichiers
 
 ```bash
