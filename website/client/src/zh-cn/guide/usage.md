@@ -20,49 +20,6 @@ repomix path/to/directory
 repomix --include "src/**/*.ts,**/*.md"
 ```
 
-### 包含完整目录结构与特定文件
-
-使用 `--include` 模式时，您还可以显示完整的目录树结构，同时仅处理选定的文件：
-
-```bash
-repomix --include "cli/**/*.go" --include-full-directory-structure
-```
-
-此标志通过在目录结构部分显示所有目录和文件（遵守忽略模式）来提供完整的仓库上下文，同时仅处理与包含模式匹配的文件。
-
-**优点：**
-- **完整的项目上下文**：查看整个目录结构，包括包含模式之外的文件
-- **聚焦处理**：文件内容和指标仍仅反映包含的文件
-- **更好的AI理解**：提供完整的仓库布局以获得更好的上下文
-
-**示例：**
-
-不使用标志：
-```
-<directory_structure>
-cli/
-  go.mod
-  main.go
-  README.md
-</directory_structure>
-```
-
-使用 `--include-full-directory-structure`：
-```
-<directory_structure>
-README.md
-LICENSE.md
-cli/
-  go.mod
-  main.go
-  README.md
-docs/
-  guide.md
-</directory_structure>
-```
-
-**注意：** 此标志仅影响目录结构的可视化。文件处理、内容和指标仍限定在您的包含模式范围内。
-
 ### 排除文件
 ```bash
 repomix --ignore "**/*.log,tmp/"

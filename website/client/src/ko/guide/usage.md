@@ -20,49 +20,6 @@ repomix path/to/directory
 repomix --include "src/**/*.ts,**/*.md"
 ```
 
-### 특정 파일과 함께 전체 디렉토리 구조 포함
-
-`--include` 패턴을 사용할 때, 선택한 파일만 처리하면서 전체 디렉토리 트리 구조를 표시할 수도 있습니다:
-
-```bash
-repomix --include "cli/**/*.go" --include-full-directory-structure
-```
-
-이 플래그는 디렉토리 구조 섹션에 모든 디렉토리와 파일(무시 패턴을 준수)을 표시하여 전체 저장소 컨텍스트를 제공하면서, include 패턴과 일치하는 파일만 처리합니다.
-
-**장점:**
-- **전체 프로젝트 컨텍스트**: include 패턴 외부의 파일을 포함한 전체 디렉토리 구조 확인
-- **집중된 처리**: 파일 내용과 메트릭은 여전히 포함된 파일만 반영
-- **향상된 AI 이해**: 더 나은 컨텍스트를 위한 전체 저장소 레이아웃 제공
-
-**예시:**
-
-플래그 없이:
-```
-<directory_structure>
-cli/
-  go.mod
-  main.go
-  README.md
-</directory_structure>
-```
-
-`--include-full-directory-structure` 사용 시:
-```
-<directory_structure>
-README.md
-LICENSE.md
-cli/
-  go.mod
-  main.go
-  README.md
-docs/
-  guide.md
-</directory_structure>
-```
-
-**참고:** 이 플래그는 디렉토리 구조 시각화에만 영향을 줍니다. 파일 처리, 내용 및 메트릭은 include 패턴으로 제한됩니다.
-
 ### 파일 제외
 ```bash
 repomix --ignore "**/*.log,tmp/"

@@ -29,49 +29,6 @@ Untuk mengemas file atau direktori tertentu menggunakan [pola glob](https://gith
 repomix --include "src/**/*.ts,**/*.md"
 ```
 
-### Menyertakan Struktur Direktori Lengkap dengan File Tertentu
-
-Saat menggunakan pola `--include`, Anda juga dapat menampilkan struktur pohon direktori lengkap sambil tetap memproses hanya file yang dipilih:
-
-```bash
-repomix --include "cli/**/*.go" --include-full-directory-structure
-```
-
-Flag ini menyediakan konteks repositori lengkap dengan menampilkan semua direktori dan file (mematuhi pola ignore) di bagian struktur direktori, sambil tetap memproses hanya file yang cocok dengan pola include.
-
-**Manfaat:**
-- **Konteks proyek lengkap**: Lihat seluruh struktur direktori, termasuk file di luar pola include
-- **Pemrosesan yang fokus**: Konten file dan metrik masih mencerminkan hanya file yang disertakan
-- **Pemahaman AI yang lebih baik**: Memberikan tata letak repositori lengkap untuk konteks yang lebih baik
-
-**Contoh:**
-
-Tanpa flag:
-```
-<directory_structure>
-cli/
-  go.mod
-  main.go
-  README.md
-</directory_structure>
-```
-
-Dengan `--include-full-directory-structure`:
-```
-<directory_structure>
-README.md
-LICENSE.md
-cli/
-  go.mod
-  main.go
-  README.md
-docs/
-  guide.md
-</directory_structure>
-```
-
-**Catatan:** Flag ini hanya mempengaruhi visualisasi struktur direktori. Pemrosesan file, konten, dan metrik tetap terbatas pada pola include Anda.
-
 ## Mengecualikan File atau Direktori
 
 Untuk mengecualikan file atau direktori tertentu:

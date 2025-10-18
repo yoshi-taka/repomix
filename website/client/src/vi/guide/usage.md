@@ -32,49 +32,6 @@ repomix --include "src/**/*.ts,**/*.md"
 
 Điều này sẽ đóng gói tất cả các tệp TypeScript trong thư mục `src` và tất cả các tệp Markdown trong toàn bộ dự án.
 
-### Bao gồm cấu trúc thư mục đầy đủ với các tệp cụ thể
-
-Khi sử dụng các mẫu `--include`, bạn cũng có thể hiển thị cấu trúc cây thư mục đầy đủ trong khi chỉ xử lý các tệp đã chọn:
-
-```bash
-repomix --include "cli/**/*.go" --include-full-directory-structure
-```
-
-Cờ này cung cấp ngữ cảnh kho lưu trữ đầy đủ bằng cách hiển thị tất cả các thư mục và tệp (tuân thủ các mẫu bỏ qua) trong phần cấu trúc thư mục, trong khi chỉ xử lý các tệp khớp với các mẫu bao gồm.
-
-**Lợi ích:**
-- **Ngữ cảnh dự án đầy đủ**: Xem toàn bộ cấu trúc thư mục, bao gồm các tệp ngoài các mẫu bao gồm
-- **Xử lý tập trung**: Nội dung tệp và số liệu vẫn chỉ phản ánh các tệp được bao gồm
-- **Hiểu biết AI tốt hơn**: Cung cấp bố cục kho lưu trữ đầy đủ để có ngữ cảnh tốt hơn
-
-**Ví dụ:**
-
-Không có cờ:
-```
-<directory_structure>
-cli/
-  go.mod
-  main.go
-  README.md
-</directory_structure>
-```
-
-Với `--include-full-directory-structure`:
-```
-<directory_structure>
-README.md
-LICENSE.md
-cli/
-  go.mod
-  main.go
-  README.md
-docs/
-  guide.md
-</directory_structure>
-```
-
-**Lưu ý:** Cờ này chỉ ảnh hưởng đến việc trực quan hóa cấu trúc thư mục. Xử lý tệp, nội dung và số liệu vẫn được giới hạn trong các mẫu bao gồm của bạn.
-
 ## Đóng gói kho lưu trữ từ xa
 
 Repomix có thể đóng gói các kho lưu trữ từ xa mà không cần clone chúng cục bộ:

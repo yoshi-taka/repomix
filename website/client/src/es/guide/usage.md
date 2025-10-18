@@ -20,49 +20,6 @@ Usa [patrones glob](https://github.com/mrmlnc/fast-glob?tab=readme-ov-file#patte
 repomix --include "src/**/*.ts,**/*.md"
 ```
 
-### Incluir estructura de directorios completa con archivos específicos
-
-Al usar patrones `--include`, también puedes mostrar la estructura de árbol de directorios completa mientras procesas solo los archivos seleccionados:
-
-```bash
-repomix --include "cli/**/*.go" --include-full-directory-structure
-```
-
-Esta bandera proporciona el contexto completo del repositorio mostrando todos los directorios y archivos (respetando los patrones de ignorar) en la sección de estructura de directorios, mientras solo procesa los archivos que coinciden con los patrones de inclusión.
-
-**Beneficios:**
-- **Contexto completo del proyecto**: Ver la estructura de directorios completa, incluyendo archivos fuera de los patrones de inclusión
-- **Procesamiento enfocado**: El contenido de los archivos y las métricas aún reflejan solo los archivos incluidos
-- **Mejor comprensión de IA**: Proporciona el diseño completo del repositorio para un mejor contexto
-
-**Ejemplo:**
-
-Sin la bandera:
-```
-<directory_structure>
-cli/
-  go.mod
-  main.go
-  README.md
-</directory_structure>
-```
-
-Con `--include-full-directory-structure`:
-```
-<directory_structure>
-README.md
-LICENSE.md
-cli/
-  go.mod
-  main.go
-  README.md
-docs/
-  guide.md
-</directory_structure>
-```
-
-**Nota:** Esta bandera solo afecta la visualización de la estructura de directorios. El procesamiento de archivos, el contenido y las métricas permanecen limitados a tus patrones de inclusión.
-
 ### Excluir archivos
 ```bash
 repomix --ignore "**/*.log,tmp/"

@@ -20,49 +20,6 @@ Use [glob patterns](https://github.com/mrmlnc/fast-glob?tab=readme-ov-file#patte
 repomix --include "src/**/*.ts,**/*.md"
 ```
 
-### Incluir Estrutura de Diretórios Completa com Arquivos Específicos
-
-Ao usar padrões `--include`, você também pode exibir a estrutura de árvore de diretórios completa enquanto processa apenas os arquivos selecionados:
-
-```bash
-repomix --include "cli/**/*.go" --include-full-directory-structure
-```
-
-Esta flag fornece o contexto completo do repositório mostrando todos os diretórios e arquivos (respeitando os padrões de exclusão) na seção de estrutura de diretórios, enquanto processa apenas os arquivos que correspondem aos padrões de inclusão.
-
-**Benefícios:**
-- **Contexto completo do projeto**: Ver a estrutura de diretórios completa, incluindo arquivos fora dos padrões de inclusão
-- **Processamento focado**: O conteúdo dos arquivos e as métricas ainda refletem apenas os arquivos incluídos
-- **Melhor compreensão da IA**: Fornece o layout completo do repositório para um melhor contexto
-
-**Exemplo:**
-
-Sem a flag:
-```
-<directory_structure>
-cli/
-  go.mod
-  main.go
-  README.md
-</directory_structure>
-```
-
-Com `--include-full-directory-structure`:
-```
-<directory_structure>
-README.md
-LICENSE.md
-cli/
-  go.mod
-  main.go
-  README.md
-docs/
-  guide.md
-</directory_structure>
-```
-
-**Nota:** Esta flag afeta apenas a visualização da estrutura de diretórios. O processamento de arquivos, o conteúdo e as métricas permanecem limitados aos seus padrões de inclusão.
-
 ### Excluir Arquivos
 ```bash
 repomix --ignore "**/*.log,tmp/"
