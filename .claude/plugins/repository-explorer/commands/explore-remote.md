@@ -6,6 +6,8 @@ Analyze a remote GitHub repository using the repository-explorer agent.
 
 When the user runs this command, they want to explore and understand a remote repository's code structure, patterns, and content.
 
+**Note**: This command is part of the repository-explorer plugin, so the repository-explorer agent is guaranteed to be available.
+
 ## Usage
 
 The user should provide a GitHub repository in one of these formats:
@@ -32,16 +34,36 @@ The user should provide a GitHub repository in one of these formats:
 Provide the repository-explorer agent with a task that includes:
 - The repository to analyze (URL or owner/repo format)
 - Any specific focus areas mentioned by the user
-- Default instruction: "Analyze this remote repository: [repo]. Provide an overview of the repository structure, main components, and key patterns. Use `npx repomix@latest --remote [repo]` to pack the repository, then analyze the generated output file."
+- Clear instructions about what analysis is needed
+
+Default instruction template:
+```
+"Analyze this remote repository: [repo]
+
+Task: Provide an overview of the repository structure, main components, and key patterns.
+
+Steps:
+1. Run `npx repomix@latest --remote [repo]` to pack the repository
+2. Note the output file location
+3. Use Grep and Read tools to analyze the output incrementally
+4. Report your findings
+
+[Add any specific focus areas if mentioned by user]
+"
+```
 
 ## Command Flow
 
-1. Parse the repository information from user input
-2. Identify any specific questions or focus areas
-3. Launch repository-explorer agent with a clear task description
-4. The agent will:
-   - Run `npx repomix@latest --remote <repo>`
-   - Analyze the generated output file
-   - Report findings
+1. Parse the repository information from user input (owner/repo or full URL)
+2. Identify any specific questions or focus areas from the user's request
+3. Launch the repository-explorer agent with:
+   - The Task tool
+   - A clear task description following the template above
+   - Any specific analysis requirements
 
-Remember: The agent will handle all the details of running repomix CLI, searching, and analyzing. Your job is to launch it with the right context about which repository to analyze.
+The agent will:
+- Run `npx repomix@latest --remote <repo>`
+- Analyze the generated output file efficiently using Grep and Read tools
+- Provide comprehensive findings based on the analysis
+
+Remember: The repository-explorer agent is optimized for this workflow. It will handle all the details of running repomix CLI, searching with grep, and reading specific sections. Your job is to launch it with clear context about which repository to analyze and what specific insights are needed.
