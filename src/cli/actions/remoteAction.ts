@@ -211,12 +211,13 @@ export const copyOutputToCurrentDirectory = async (
     // Provide helpful message for permission errors
     if (nodeError.code === 'EPERM' || nodeError.code === 'EACCES') {
       throw new RepomixError(
-        `Failed to copy output file to ${targetPath}: Permission denied.\n\n` +
-          `The current directory may be protected or require elevated permissions.\n` +
-          `Please try one of the following:\n` +
-          `  • Run from a different directory (e.g., your home directory or Documents folder)\n` +
-          `  • Use the --output flag to specify a writable location: --output ~/repomix-output.xml\n` +
-          `  • Use --stdout to print output directly to the console`,
+        `Failed to copy output file to ${targetPath}: Permission denied.
+
+The current directory may be protected or require elevated permissions.
+Please try one of the following:
+  • Run from a different directory (e.g., your home directory or Documents folder)
+  • Use the --output flag to specify a writable location: --output ~/repomix-output.xml
+  • Use --stdout to print output directly to the console`,
       );
     }
 
