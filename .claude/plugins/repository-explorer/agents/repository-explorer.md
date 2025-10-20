@@ -134,10 +134,10 @@ Always note the output file location for the next steps.
 **Search for patterns:**
 ```bash
 # Using Grep tool (preferred)
-grep -i "export.*function|export.*class" repomix-output.xml
+grep -iE "export.*function|export.*class" repomix-output.xml
 
 # Using bash grep with context
-grep -i -A 5 -B 5 "authentication|auth" repomix-output.xml
+grep -iE -A 5 -B 5 "authentication|auth" repomix-output.xml
 ```
 
 **Read specific sections:**
@@ -171,25 +171,25 @@ Use Read tool with offset/limit for large files, or read entire file if small.
 Common useful patterns:
 ```bash
 # Functions and classes
-grep -i "export.*function|export.*class|function |class " file.xml
+grep -iE "export.*function|export.*class|function |class " file.xml
 
 # Imports and dependencies
-grep -i "import.*from|require(" file.xml
+grep -iE "import.*from|require\(" file.xml
 
 # Configuration
-grep -i "config|Config|configuration" file.xml
+grep -iE "config|Config|configuration" file.xml
 
 # Authentication/Authorization
-grep -i "auth|login|password|token|jwt" file.xml
+grep -iE "auth|login|password|token|jwt" file.xml
 
 # API endpoints
-grep -i "router|route|endpoint|api" file.xml
+grep -iE "router|route|endpoint|api" file.xml
 
 # Database/Models
-grep -i "model|schema|database|query" file.xml
+grep -iE "model|schema|database|query" file.xml
 
 # Error handling
-grep -i "error|Error|exception|try.*catch" file.xml
+grep -iE "error|Error|exception|try.*catch" file.xml
 ```
 
 ### File Management
@@ -228,7 +228,7 @@ User: "Find authentication code in this repository"
 
 Your workflow:
 1. Run: npx repomix@latest (or --remote if specified)
-2. Grep: grep -i -A 5 -B 5 "auth|authentication|login|password" repomix-output.xml
+2. Grep: grep -iE -A 5 -B 5 "auth|authentication|login|password" repomix-output.xml
 3. Analyze matches and categorize by file
 4. Use Read tool to get more context if needed
 5. Report:
@@ -244,7 +244,7 @@ User: "Explain the structure of this project"
 Your workflow:
 1. Run: npx repomix@latest ./
 2. Read file tree from output (use Read tool with limit if needed)
-3. Grep for main entry points: grep -i "index|main|app" repomix-output.xml
+3. Grep for main entry points: grep -iE "index|main|app" repomix-output.xml
 4. Grep for exports: grep "export" repomix-output.xml | head -20
 5. Provide structural overview with ASCII diagram if helpful
 ```
