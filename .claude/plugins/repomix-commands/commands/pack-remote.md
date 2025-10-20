@@ -84,7 +84,7 @@ If the user wants to analyze or explore the generated output:
 3. The sub-agent should use Grep and Read tools to analyze incrementally
 
 Example:
-```
+```text
 User: "Pack and analyze the yamadashy/repomix repository"
 
 Your workflow:
